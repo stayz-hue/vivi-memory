@@ -6,6 +6,11 @@
 ---
 
 ## [최근 3일]
+### 2026-04-15
+
+#### 결정
+- ViviApp 대면 상담 자동 감지 파이프라인 완성. VAD(Silero v5)+화자인식(ECAPA-TDNN) → 사용자(sim=0.519)+타인(sim=0.106) 감지 → 자동 녹음 → 서버 업로드 SUCCESS. 파일: auto_meet_1776181160676.wav(1.83MB) 수신 확인. 핵심 수정: MIC AudioSource 통일, 임베딩 등록 후 서비스 재시작 필요, MEETING_DETECT_WINDOW_SEC=60, VAD_MIN_THRESHOLD=0.03.
+
 ### 2026-04-14
 
 #### 결정
