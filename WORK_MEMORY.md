@@ -9,6 +9,9 @@
 ### 2026-04-14
 
 #### 결정
+- meeting-recorder/server.py에 _save_speech_metrics 추가: 리턴제로 utterances(start_at ms + duration ms)에서 말속도(WPM), 침묵간격(avg/max/count) 추출 → signal_metrics 저장. process_call() 내 format_transcript 직후 호출. meeting-recorder 서비스 재시작 완료
+
+#### 결정
 - signal_metrics 테이블 생성 + signal_analyzer.py 크론 등록(매일 KST 09:30). transcribe_calls.py 말속도/침묵 추출은 파일 미존재로 보류. timeline 컬럼: tenant_id/timestamp/source/direction/raw_message (contact_id 전부 NULL, tenant_id 기준 분석). 분석 결과: response_time_sec 21건, contact_frequency 10건, message_length 3건 signal_metrics 저장
 
 #### 결정
