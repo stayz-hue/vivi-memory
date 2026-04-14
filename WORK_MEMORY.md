@@ -9,6 +9,9 @@
 ### 2026-04-14
 
 #### 결정
+- signal_metrics 테이블 생성 + signal_analyzer.py 크론 등록(매일 KST 09:30). transcribe_calls.py 말속도/침묵 추출은 파일 미존재로 보류. timeline 컬럼: tenant_id/timestamp/source/direction/raw_message (contact_id 전부 NULL, tenant_id 기준 분석). 분석 결과: response_time_sec 21건, contact_frequency 10건, message_length 3건 signal_metrics 저장
+
+#### 결정
 - 환율 크론 등록: ecos_collector.py 매일 UTC 00:00(KST 09:00) 실행. update_work_memory.py 카테고리 현황/이슈 추가 → 총 6개(결정/인사이트/논의중/보류/현황/이슈)
 
 #### 결정
