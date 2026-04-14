@@ -20,7 +20,7 @@ WORK_MEMORY_PATH = "/root/docs/WORK_MEMORY.md"
 COMPRESS_SCRIPT  = "/root/docs/compress_memory.py"
 VENV_PYTHON      = "/root/.hermes/hermes-agent/venv/bin/python3"
 BIBI_GATEWAY_URL = "http://localhost:5114/webhook/bibi-incoming"
-VALID_CATEGORIES = ["결정", "인사이트", "논의 중", "보류"]
+VALID_CATEGORIES = ["결정", "인사이트", "논의 중", "보류", "현황", "이슈"]
 
 
 def kst_today():
