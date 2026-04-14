@@ -9,6 +9,9 @@
 ### 2026-04-14
 
 #### 결정
+- 0층 생활형 API 현황 확인: 날씨(vivi_env/weather.py)+미세먼지(air_quality.py) 크론 등록완료(3시간마다+KST06:00). 환율은 ecos_collector.py 구현됨 but 크론 미등록. 공휴일 매월1일. systemctl 서비스 없음, 전부 크론 기반.
+
+#### 결정
 - WORK_MEMORY 보고 규칙 간소화: 로컬+VPS CLAUDE.md 동기화 완료. 긴 규칙 → 핵심 4줄로 압축
 
 #### 결정
