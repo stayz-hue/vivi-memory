@@ -9,6 +9,9 @@
 ### 2026-04-14
 
 #### 결정
+- 환율 크론 등록: ecos_collector.py 매일 UTC 00:00(KST 09:00) 실행. update_work_memory.py 카테고리 현황/이슈 추가 → 총 6개(결정/인사이트/논의중/보류/현황/이슈)
+
+#### 결정
 - 0층 생활형 API 현황 확인: 날씨(vivi_env/weather.py)+미세먼지(air_quality.py) 크론 등록완료(3시간마다+KST06:00). 환율은 ecos_collector.py 구현됨 but 크론 미등록. 공휴일 매월1일. systemctl 서비스 없음, 전부 크론 기반.
 
 #### 결정
