@@ -9,6 +9,9 @@
 ### 2026-04-14
 
 #### 결정
+- update_work_memory.py 설치 완료 및 테스트
+
+#### 결정
 - 기억 인프라 5개 설치 완료: pgvector(v0.6.0) + Qdrant(6333) + Neo4j(7474/7687) + Graphiti(8000) + Honcho(8100)
 - Zep → Graphiti 변경 (Zep 셀프호스팅 deprecated)
 - Honcho self-hosted 선택 (데이터 주권 원칙)
