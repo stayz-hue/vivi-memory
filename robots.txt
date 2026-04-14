@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /vivi-mem-8f3k2x/
+Disallow: /
