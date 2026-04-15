@@ -145,6 +145,21 @@
 - 실데이터에서 "네네~" → simple_reply/low 정확 분류 확인 — Kiwi 규칙 기반이 실전에서 작동
 - 유사도 threshold 튜닝은 실제 오분류 사례 축적 후 조정 예정
 
+#### 결정
+- 작업A 완료: 통화녹음(meeting-recorder) → 1층 파이프라인 연결. server.py에 sender/sender_name 2줄 추가. 기존 STT 로직 무변경.
+  - 검증: layer1_messages 저장 ✅, 연락처 resolve ✅, 의도분류(new_inquiry) ✅, 긴급도(immediate) ✅, 임베딩 ✅
+- 작업B 완료: Upstage Document AI 서류 파이프라인 구축.
+  - upstage_client.py + doc_pipeline.py 생성
+  - document_parse_results 테이블 (vector(768), JSONB, 인덱스 3개)
+  - POST /document-parse 엔드포인트 추가
+  - API 키(.env에 UPSTAGE_API_KEY) 넣으면 mock→실전 즉시 전환
+  - Upstage 무료 크레딧 $10 확보 완료
+- 작업C(중복알림 제거 + 발신 분류) 진행 중
+
+#### 인사이트
+- 통화녹음 1층 연결은 기존 웹훅 경로를 그대로 활용해서 2줄로 해결 — 새 경로 만들 필요 없었음
+- Upstage Document AI: Parse $0.01/page + Extract $0.03/page + Classify 무료(베타). $10 크레딧이면 250페이지 처리 가능
+
 ### 2026-04-14
 
 #### 결정
@@ -297,6 +312,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -305,6 +322,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
