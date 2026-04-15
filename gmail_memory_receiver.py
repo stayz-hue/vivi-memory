@@ -12,6 +12,7 @@ LAST_RUN_PATH = "/tmp/gmail_poller_last_run"
 
 import os
 import base64
+import subprocess
 from datetime import datetime, timezone
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
@@ -53,7 +54,7 @@ def get_subject(payload):
     return ''
 
 def fetch_memory_drafts(service):
-    """드래프트 중 [VIVI-MEMORY] 제목인 것만 가져오고 삭제"""
+    """드래프트 중 WORK_MEMORY| 제목인 것만 가져오고 삭제"""
     results = service.users().drafts().list(userId='me', maxResults=50).execute()
     drafts = results.get('drafts', [])
 
@@ -124,6 +125,24 @@ def try_compress():
     except Exception as e:
         print(f"[compress skip] {e}")
 
+def git_push():
+    """WORK_MEMORY.md 변경 사항을 GitHub에 자동 push"""
+    try:
+        repo = '/root/docs'
+        now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
+        subprocess.run(['git', 'add', 'WORK_MEMORY.md'], cwd=repo, check=True)
+        result = subprocess.run(
+            ['git', 'commit', '-m', f'auto: sync WORK_MEMORY {now_str}'],
+            cwd=repo, capture_output=True, text=True
+        )
+        if 'nothing to commit' in result.stdout + result.stderr:
+            print('[git] 변경 없음, push 생략')
+            return
+        subprocess.run(['git', 'push'], cwd=repo, check=True)
+        print(f'[git] push 완료')
+    except Exception as e:
+        print(f'[git push skip] {e}')
+
 def main():
     try:
         service = get_gmail_service()
@@ -133,6 +152,7 @@ def main():
             merge_to_work_memory(entries)
             print(f"[{now_str}] {len(entries)}건 병합 완료")
             try_compress()
+            git_push()
         else:
             print(f"[{now_str}] 새 드래프트 없음")
         # 마지막 실행 시각 기록 (Track B health check 용)
