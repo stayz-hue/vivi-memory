@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- contact_resolver.py 수정: resolve_contact 진입 시 matching_log confirmed 우선 조회 적용. _lookup_confirmed_match(nickname) 함수 추가 — sender_name 있고 phone 없을 때 matching_log에서 result=confirmed 최신 기록 조회 후 즉시 반환(score=100, basis=confirmed_match). 기존 exact/partial/fuzzy 로직은 그대로 유지. 테스트4개 전부 PASS. server.py 수정 불필요 확인.
+
+#### 결정
 - 작업D 완료: ViviApp 사진/서류 수신 → Upstage 자동 연결. meeting-recorder server.py의 /upload-photo, /upload-document 핸들러를 doc_pipeline.process_document 직접 호출로 교체. 모든 사진/서류를 Upstage OCR+분류+필드추출 후 document_parse_results DB 저장 + Telegram 📎 서류수신 알림 발송. 원시 알림 제거. Upstage 실패 시 기존 webhook 폴백 유지. UPSTAGE_API_KEY를 /root/meeting-recorder/.env에 추가. 실 API 호출 검증 완료(confidence=1, viviapp_photo/viviapp_document source로 DB 저장).
 
 #### 현황
