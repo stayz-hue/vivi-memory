@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- Upstage API 엔드포인트 수정 완료. 올바른 URL: POST /v1/document-digitization (suffix 없음), output_formats=["text","markdown"] 파라미터 필수. 실전 검증: PDF 7페이지 OCR text_len=25254, mock=False, DB 저장 확인. 파이프라인 전체 정상 동작.
+
+#### 결정
 - 통화녹음 STT → 1층 파이프라인 연결 완료. meeting-recorder/server.py의 _send_webhook 호출에 sender(전화번호), sender_name(이름) 필드 추가. 기존 bibi-gateway → message_jobs → layer1 worker 경로 활용. 검증: layer1_messages에 channel=call, contact_id=CON-0319(연락처 resolve), intent=new_inquiry, urgency=immediate, has_embedding=t 저장 확인
 
 #### 결정
