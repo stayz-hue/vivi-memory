@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- DB 스키마 변경 + timeline contact_id 복구 완료. 1) contacts 테이블 person_type VARCHAR(20) DEFAULT 미분류 컬럼 추가 2) 버그 기록 timeline 17건(16001522 번호) 삭제 → 313건 남음 3) backfill_contact_id.py 실행 → 199/313건 contact_id 복구(63.6%), 실패 1건(곽상일-미등록), 스킵 113건 4) normalize_name에 유니코드 제어문자(U+2068/U+2069 등) strip 추가로 CON-0312 김말자 동시감정 담당자2 추가 매칭 성공
+
+#### 결정
 - pipeline.py 검증 완료. 실제 payload 재전송 결과: [금윤미] bracket 추출→display_name=금윤미/CASE-20260415-금윤미(수정전 unknown), [채팅]나에게답장/[파일명]나에게답장→noise_skipped, 카카오페이→spam_skipped(contactName 있/없 둘 다). 버그 1건 발견+수정: bracket 추출 시 스팸이름도 name에 세팅해야 is_spam_sender()가 작동(수정전엔 spam name을 name에 미세팅→필터 무동작). 최종 로직: body에서 bracket 추출→name 무조건 세팅→process_message에서 is_spam_sender()처리.
 
 #### 결정
@@ -480,6 +483,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -488,6 +493,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
