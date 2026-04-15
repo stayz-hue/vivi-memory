@@ -393,6 +393,36 @@
 - Honcho/Graphiti API 스펙 미확인 — 작업 시작 전 반드시 엔드포인트 탐색 먼저
 - 비비 철학 적용: 애매한 케이스는 텔레그램으로 1번 확인 → confirmed 축적 → 자동 범위 확대
 
+#### 결정
+- 기억 인프라 1층 연동 4 Phase 전부 완료 (2026-04-15):
+
+Phase 0 롤백: bibi-gateway에서 수동 텔레그램 커맨드(handle_consultation_command, /webhook/telegram) 삭제. v3 설계 위반이었음.
+
+Phase 1 Honcho(8100) 연결: honcho_client.py 신규 생성. 메시지 도착 시 contact_id별 세션에 대화 자동 기록. 백그라운드 스레드로 기존 파이프라인 무영향.
+
+Phase 2 Graphiti(8000) 연결: graphiti_client.py 신규 생성. 메시지를 지식 그래프 에피소드로 자동 투입. 엔티티/관계 자동 추출 시작.
+
+Phase 3 케이스 자동 감지: case_manager.py 신규 생성. 상담 키워드 감지 → 상담중 케이스 자동 생성 + 텔레그램 알림. 수수료 키워드 발신 → 진행중→종결 자동 전환. ucansign_webhook.py 수정 → 서명 완료 시 상담중→진행중 자동 전환.
+
+Phase 4 이탈 감지: case_churn_detector.py 신규 생성. 매일 KST 09:00 크론. 상담중 3일 무연락 → 텔레그램 알림.
+
+- 검증 4건 전부 PASS: 상담 키워드 → CASE 자동 생성, Honcho 세션 생성, Graphiti 에피소드 수신, churn detector 정상 동작
+
+#### 현황
+- 기억 인프라 연결 상태:
+  pgvector: 연결됨 (기존)
+  Honcho: 연결됨 (신규, 데이터 축적 시작)
+  Graphiti: 연결됨 (신규, 데이터 축적 시작)
+  Qdrant: 미연결 (판례 17만건 로드 필요)
+  Neo4j: Graphiti 경유 자동 축적 중
+
+- 다음 작업: 판례 17만건 Qdrant 로드, 맥브라이드/보상기준 Neo4j 입력, Graphiti Custom Entity 정의(손사 도메인 인터뷰 필요)
+
+#### 인사이트
+- 기억 인프라 연결은 기존 파이프라인과 백그라운드 스레드로 분리 → 기존 기능 무영향
+- Honcho/Graphiti는 데이터 축적형 — Day 1부터 완벽하지 않고 2~4주간 축적되면서 정확도 상승
+- 케이스 자동 감지를 수동 커맨드가 아닌 기억 인프라 기반으로 구현 — v3 설계 원칙 준수
+
 ### 2026-04-14
 
 #### 결정
@@ -583,6 +613,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -591,6 +623,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
