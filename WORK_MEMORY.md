@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 작업B Upstage Document AI 1층 파이프라인 구축 완료. bibi-gateway(5114)에 POST /document-parse 라우트 추가 (기존 /webhook/bibi-incoming, /notify 무변경). 생성 파일: upstage_client.py(mock모드+실전전환), doc_pipeline.py(MinIO→Upstage→DB→텔레그램). DB: document_parse_results 테이블 생성(vector(768), JSONB, 인덱스 3개). MinIO vivi-documents 버킷 사용. API 키(UPSTAGE_API_KEY) /root/.env에 자리 만들어둠 — 키 입력 시 즉시 실전 전환.
+
+#### 결정
 - 1층 3단계 완료: ko-sroberta(jhgan/ko-sroberta-multitask 768dim) 임베딩+pgvector HNSW 인덱스로 케이스 매칭 구현. case_matcher.py 생성. threshold=0.70, lookback=30일. embedding 컬럼 layer1_messages에 추가. 검증: 교통사고상담 vs 교통사고진행확인 cosine_sim=0.6858로 신규케이스(threshold 미달), 다른발신자=다른케이스. _new_case_id가 결정론적(contact_id+날짜)이라 threshold 미달도 같은 케이스 ID 배정됨. 실데이터 쌓이면 threshold 튜닝 예정.
 
 #### 결정
