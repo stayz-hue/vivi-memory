@@ -125,6 +125,20 @@
 - 버그는 영원히 안 사라짐 — "빨리 알고 빨리 고치는 체계"가 답
 - Uptime Kuma 비밀번호 변경 필요 (초기값 Vivi2026!)
 
+#### 결정
+- 1층 이해(Comprehension) 레이어 4단계 전부 완료:
+  1. 뼈대 (큐 + worker) ✅
+  2. 분류 (Kiwi 규칙 기반 intent/urgency) ✅
+  3. 케이스 매칭 (ko-sroberta 768dim + pgvector HNSW) ✅
+  4. 알림 업그레이드 (smart notification — low/simple_reply 생략) ✅
+- 전체 파이프라인: 메시지 수신 → 의도/긴급도 분류 → 임베딩+케이스 매칭 → 스마트 텔레그램 알림. API 호출 없이 로컬 처리.
+- ko-sroberta cosine threshold 0.70 설정. 같은 발신자+같은 날이면 contactId 기반으로 동일 케이스 귀결 (임베딩은 보조 수단).
+- 테이블: layer1_messages, layer1_classification_logs (messages 테이블명 충돌 방지)
+
+#### 인사이트
+- 실데이터에서 "네네~" → simple_reply/low 정확 분류 확인 — Kiwi 규칙 기반이 실전에서 작동
+- 유사도 threshold 튜닝은 실제 오분류 사례 축적 후 조정 예정
+
 ### 2026-04-14
 
 #### 결정
@@ -273,6 +287,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -281,6 +297,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
