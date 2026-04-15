@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 통화녹음 STT → 1층 파이프라인 연결 완료. meeting-recorder/server.py의 _send_webhook 호출에 sender(전화번호), sender_name(이름) 필드 추가. 기존 bibi-gateway → message_jobs → layer1 worker 경로 활용. 검증: layer1_messages에 channel=call, contact_id=CON-0319(연락처 resolve), intent=new_inquiry, urgency=immediate, has_embedding=t 저장 확인
+
+#### 결정
 - 작업B Upstage Document AI 1층 파이프라인 구축 완료. bibi-gateway(5114)에 POST /document-parse 라우트 추가 (기존 /webhook/bibi-incoming, /notify 무변경). 생성 파일: upstage_client.py(mock모드+실전전환), doc_pipeline.py(MinIO→Upstage→DB→텔레그램). DB: document_parse_results 테이블 생성(vector(768), JSONB, 인덱스 3개). MinIO vivi-documents 버킷 사용. API 키(UPSTAGE_API_KEY) /root/.env에 자리 만들어둠 — 키 입력 시 즉시 실전 전환.
 
 #### 결정
