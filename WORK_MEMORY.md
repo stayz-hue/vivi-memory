@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 1층 3단계 완료: ko-sroberta(jhgan/ko-sroberta-multitask 768dim) 임베딩+pgvector HNSW 인덱스로 케이스 매칭 구현. case_matcher.py 생성. threshold=0.70, lookback=30일. embedding 컬럼 layer1_messages에 추가. 검증: 교통사고상담 vs 교통사고진행확인 cosine_sim=0.6858로 신규케이스(threshold 미달), 다른발신자=다른케이스. _new_case_id가 결정론적(contact_id+날짜)이라 threshold 미달도 같은 케이스 ID 배정됨. 실데이터 쌓이면 threshold 튜닝 예정.
+
+#### 결정
 - 1층 4단계 완료: notify.py 생성(분류결과 텔레그램 알림), bibi-gateway에 /notify 라우트 추가(기존 send_telegram 경유), pipeline.py 알림 연결. 알림 생략 조건: direction=outgoing 또는 urgency=low+intent=simple_reply. 검증: 신규상담→notification_sent, 단순응답 넵→생략, 발신→생략. DB저장은 모든 케이스 정상. 3단계(ko-sroberta 케이스매칭) 미구현 상태.
 
 #### 결정
