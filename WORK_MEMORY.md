@@ -68,6 +68,23 @@
 - 의견서는 고객 서류가 아니라 대표님이 보험사에 보내는 업무 양식
 - 변호사법 위반 항상 조심해야 함 → 비비 3층 판단에서 경계선 알림 기능 필요
 
+## 결정
+- ViviNotificationListener(NotificationListenerService)가 갤럭시 배터리 최적화에 의해 반복적으로 죽는 문제 발생
+- SMS/카톡 수신 감지를 AccessibilityService로 전환 완료 (2026-04-15)
+- AccessibilityService는 시스템이 보호하므로 배터리 최적화에 죽지 않음
+
+## 이슈
+- AccessibilityService로 SMS 알림 감지 시 발신자 번호 파싱 버그 발견
+- 실제 발신번호 대신 삼성 메시지 앱 내부 ID(예: 16001522)가 찍힘
+- 로그 확인 후 수정 필요 (event.getText(), getParcelableData() 등 어떤 값이 오는지 먼저 확인)
+
+## 현재 0층 감지 구조 (업데이트)
+- 카톡 발신: KakaoOutgoingService (AccessibilityService) — 변경 없음
+- 카톡 수신: AccessibilityService로 전환 (NotificationListener에서 변경)
+- 문자 수신: AccessibilityService로 전환 (NotificationListener에서 변경)
+- 문자 발신: SmsOutgoingObserver — 변경 없음
+- 통화녹음/대면녹음/사진: 기존 유지
+
 ### 2026-04-14
 
 #### 결정
@@ -206,6 +223,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -214,6 +233,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
