@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- pipeline.py 4개 기능 추가: (1) rawMessage [닉네임] 추출 - sender_name 비어있을 때 re.match로 앞 대괄호 패턴 추출, SPAM_SENDERS 아닌 경우만 name으로 사용 (2) is_noise() - [.+] 나에게 답장 패턴 타임라인만 저장 분류/알림 스킵 (3) SPAM_SENDERS 상수 + is_spam_sender() - 카카오페이/토스 등 공식채널 완전 무시 (4) generate_case_id() - contact_id unknown 포함 시 name[:3] 또는 순번(001~)으로 재생성. 구문OK + 4개 시나리오 전부 통과.
+
+#### 결정
 - meeting-recorder server.py에 extract_call_info() 함수 추가. 통화녹음 파일명(통화_녹음_{상대방}_{YYMMDD}_{HHMMSS})에서 이름/번호 파싱. form 필드(phone_number, contact_name) 우선, 없으면 파일명 fallback. webhook sender/sender_name에 반영. 5/5 파싱 테스트 OK.
 
 #### 결정
