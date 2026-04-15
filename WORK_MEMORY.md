@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 작업A 완료: cases 테이블 재설계 + OO 상담 텔레그램 커맨드 구현. cases에 case_types(TEXT), accident_date(DATE), updated_at(TIMESTAMP), created_at(TIMESTAMP) 4개 컬럼 추가. bibi-gateway/server.py에 /webhook/telegram 엔드포인트 + handle_consultation_command() 함수 추가. 텔레그램 웹훅 https://stayz90.com/webhook/telegram 등록. 대표님(8772819343)이 OO 상담 입력 시 케이스 자동 생성, contacts 이름 매칭으로 contact_id 자동 연결, 중복 케이스 방지. 검증 완료(3개 테스트 통과).
+
+#### 결정
 - DB 스키마 변경 + timeline contact_id 복구 완료. 1) contacts 테이블 person_type VARCHAR(20) DEFAULT 미분류 컬럼 추가 2) 버그 기록 timeline 17건(16001522 번호) 삭제 → 313건 남음 3) backfill_contact_id.py 실행 → 199/313건 contact_id 복구(63.6%), 실패 1건(곽상일-미등록), 스킵 113건 4) normalize_name에 유니코드 제어문자(U+2068/U+2069 등) strip 추가로 CON-0312 김말자 동시감정 담당자2 추가 매칭 성공
 
 #### 결정
