@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 작업C 수신 중복 알림 제거 + 발신 1층 처리 완료. bibi-gateway: kakao/sms/pc_kakao 원시 알림 제거(photo/call/meeting 유지). vivi-layer1 classifier.py: 발신 intent 추가(request_contact, quote_estimate, follow_up, reply_info). pipeline.py: 발신 urgency=low 고정, 발신 simple_reply 알림 생략. notify.py: 📤 발신 포맷 추가(case_id, intent 표시). 검증: 수신 1층만 알림, 발신 연락처요청 📤 알림, 발신 넵 알림 생략 모두 확인.
+
+#### 결정
 - Upstage API 엔드포인트 수정 완료. 올바른 URL: POST /v1/document-digitization (suffix 없음), output_formats=["text","markdown"] 파라미터 필수. 실전 검증: PDF 7페이지 OCR text_len=25254, mock=False, DB 저장 확인. 파이프라인 전체 정상 동작.
 
 #### 결정
