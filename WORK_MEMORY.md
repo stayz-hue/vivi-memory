@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 0층 모니터링 작업B+C 완료. B: /root/vivi_env/daily_report.py 생성, 매일 KST 09:00(UTC 00:00) 크론, 채널별 감지 건수+평일 0건 경고→bibi-gateway 웹훅→텔레그램. C: /root/vivi_env/e2e_test.py 생성, 매일 KST 06:00(UTC 21:00) 크론, 합성 메시지→파이프라인 검증→테스트 데이터 삭제→Bot API 직접 텔레그램 알림
+
+#### 결정
 - 1층 이해(Comprehension) 텍스트 입구 1단계 뼈대 구축 완료. /root/vivi-layer1/ 생성: config.py, pipeline.py, db.py, worker.py. DB 테이블 3개 생성: layer1_messages(기존 messages는 Honcho 시스템 충돌로 이름 변경), layer1_classification_logs, message_jobs. bibi-gateway/server.py에 enqueue_message() 추가(기존 텔레그램 알림 유지). Hermes venv에 psycopg 설치. vivi-layer1 systemd 서비스 등록 및 기동. 검증: 웹훅 수신→message_jobs(status=done)→layer1_messages 저장 전 흐름 정상.
 
 #### 결정

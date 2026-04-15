@@ -138,6 +138,10 @@ def git_push():
         if 'nothing to commit' in result.stdout + result.stderr:
             print('[git] 변경 없음, push 생략')
             return
+        try:
+            subprocess.run(['git', 'pull', '--rebase'], cwd=repo, capture_output=True, text=True)
+        except Exception as pull_e:
+            print(f'[git] pull 실패 (push 계속 시도): {pull_e}')
         subprocess.run(['git', 'push'], cwd=repo, check=True)
         print(f'[git] push 완료')
     except Exception as e:
