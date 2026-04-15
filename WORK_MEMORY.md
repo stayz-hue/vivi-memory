@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 1층 이해(Comprehension) 텍스트 입구 1단계 뼈대 구축 완료. /root/vivi-layer1/ 생성: config.py, pipeline.py, db.py, worker.py. DB 테이블 3개 생성: layer1_messages(기존 messages는 Honcho 시스템 충돌로 이름 변경), layer1_classification_logs, message_jobs. bibi-gateway/server.py에 enqueue_message() 추가(기존 텔레그램 알림 유지). Hermes venv에 psycopg 설치. vivi-layer1 systemd 서비스 등록 및 기동. 검증: 웹훅 수신→message_jobs(status=done)→layer1_messages 저장 전 흐름 정상.
+
+#### 결정
 - ViviApp 대면 상담 자동 감지 파이프라인 완성. VAD(Silero v5)+화자인식(ECAPA-TDNN) → 사용자(sim=0.519)+타인(sim=0.106) 감지 → 자동 녹음 → 서버 업로드 SUCCESS. 파일: auto_meet_1776181160676.wav(1.83MB) 수신 확인. 핵심 수정: MIC AudioSource 통일, 임베딩 등록 후 서비스 재시작 필요, MEETING_DETECT_WINDOW_SEC=60, VAD_MIN_THRESHOLD=0.03.
 
 #### 결정
