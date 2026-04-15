@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- pipeline.py 검증 완료. 실제 payload 재전송 결과: [금윤미] bracket 추출→display_name=금윤미/CASE-20260415-금윤미(수정전 unknown), [채팅]나에게답장/[파일명]나에게답장→noise_skipped, 카카오페이→spam_skipped(contactName 있/없 둘 다). 버그 1건 발견+수정: bracket 추출 시 스팸이름도 name에 세팅해야 is_spam_sender()가 작동(수정전엔 spam name을 name에 미세팅→필터 무동작). 최종 로직: body에서 bracket 추출→name 무조건 세팅→process_message에서 is_spam_sender()처리.
+
+#### 결정
 - pipeline.py 4개 기능 추가: (1) rawMessage [닉네임] 추출 - sender_name 비어있을 때 re.match로 앞 대괄호 패턴 추출, SPAM_SENDERS 아닌 경우만 name으로 사용 (2) is_noise() - [.+] 나에게 답장 패턴 타임라인만 저장 분류/알림 스킵 (3) SPAM_SENDERS 상수 + is_spam_sender() - 카카오페이/토스 등 공식채널 완전 무시 (4) generate_case_id() - contact_id unknown 포함 시 name[:3] 또는 순번(001~)으로 재생성. 구문OK + 4개 시나리오 전부 통과.
 
 #### 결정
