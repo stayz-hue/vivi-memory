@@ -85,6 +85,16 @@
 - 문자 발신: SmsOutgoingObserver — 변경 없음
 - 통화녹음/대면녹음/사진: 기존 유지
 
+#### 결정
+- 1층 텍스트 입구 작업지시서 완성: 4단계 구현 (뼈대→분류→케이스매칭→알림업그레이드)
+- 1단계(뼈대) 클코 지시 시작: 프로젝트 구조 + DB 테이블 + message_jobs 큐 + worker.py + bibi-gateway 연결
+
+#### 현황  
+- Gmail 폴링 파이프라인 수리 완료 (제목 패턴 WORK_MEMORY| + git push 자동화 + 1분 폴링)
+- 문자 발신 감지 AccessibilityService 전환 완료 (ContentObserver→AccessibilityService 내 ContentObserver 등록으로 안정성 확보)
+- 0층 안정성 개선 3건 완료 (중복 등록 방지, 메모리 누수, debounce 500ms)
+- 헬스체크 강화 완료 (Gmail OAuth + 마지막 수거 시각 + git 상태 + 텔레그램 알림, 매시 정각)
+
 ### 2026-04-14
 
 #### 결정
@@ -225,6 +235,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -233,6 +245,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
