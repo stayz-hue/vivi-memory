@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 1층 4단계 완료: notify.py 생성(분류결과 텔레그램 알림), bibi-gateway에 /notify 라우트 추가(기존 send_telegram 경유), pipeline.py 알림 연결. 알림 생략 조건: direction=outgoing 또는 urgency=low+intent=simple_reply. 검증: 신규상담→notification_sent, 단순응답 넵→생략, 발신→생략. DB저장은 모든 케이스 정상. 3단계(ko-sroberta 케이스매칭) 미구현 상태.
+
+#### 결정
 - 1층 2단계 완료: contact.py(contact-resolver 5111 연동, 실제 응답필드 contactId/displayName/isNew 맞춤), classifier.py(Kiwi 형태소+키워드 규칙, Gemini 폴백 구조 완성, 키 없으면 비활성), urgency.py(채널/의도/키워드 기반 4단계), pipeline.py 전체 파이프라인 연결. 테스트 5개 전부 통과: new_inquiry/document_submit/progress_check/simple_reply=정확, phone채널=immediate 정확. 규칙 분류 신뢰도 0.7~0.9 달성.
 
 #### 결정
