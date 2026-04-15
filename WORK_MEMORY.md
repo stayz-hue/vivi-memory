@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- meeting-recorder server.py에 extract_call_info() 함수 추가. 통화녹음 파일명(통화_녹음_{상대방}_{YYMMDD}_{HHMMSS})에서 이름/번호 파싱. form 필드(phone_number, contact_name) 우선, 없으면 파일명 fallback. webhook sender/sender_name에 반영. 5/5 파싱 테스트 OK.
+
+#### 결정
 - contact_resolver.py 수정: resolve_contact 진입 시 matching_log confirmed 우선 조회 적용. _lookup_confirmed_match(nickname) 함수 추가 — sender_name 있고 phone 없을 때 matching_log에서 result=confirmed 최신 기록 조회 후 즉시 반환(score=100, basis=confirmed_match). 기존 exact/partial/fuzzy 로직은 그대로 유지. 테스트4개 전부 PASS. server.py 수정 불필요 확인.
 
 #### 결정
