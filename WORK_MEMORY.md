@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-15
 
+#### 현황
+- ViviApp 통화녹음 업로드 정상 동작 확인. nginx /recording-upload → 5113/upload-recording 이미 설정됨. FileWatcherService 생존 확인(오늘 09:13/09:18/09:33 업로드 성공). 업로드 안 된다는 신고는 특정 시간대 일시적 현상으로 판단, 수정 없음.
+
 #### 결정
 - 작업C 수신 중복 알림 제거 + 발신 1층 처리 완료. bibi-gateway: kakao/sms/pc_kakao 원시 알림 제거(photo/call/meeting 유지). vivi-layer1 classifier.py: 발신 intent 추가(request_contact, quote_estimate, follow_up, reply_info). pipeline.py: 발신 urgency=low 고정, 발신 simple_reply 알림 생략. notify.py: 📤 발신 포맷 추가(case_id, intent 표시). 검증: 수신 1층만 알림, 발신 연락처요청 📤 알림, 발신 넵 알림 생략 모두 확인.
 
