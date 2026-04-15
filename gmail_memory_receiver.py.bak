@@ -7,7 +7,7 @@ Gmail 드래프트에서 [VIVI-MEMORY] 제목 항목을 읽어서 WORK_MEMORY.md
 CREDENTIALS_PATH = "/root/.hermes/google_client_secret.json"
 TOKEN_PATH = "/root/.hermes/google_token_gmail.json"
 WORK_MEMORY_PATH = "/root/docs/WORK_MEMORY.md"
-SUBJECT_PREFIX = "WORK_MEMORY|"
+SUBJECT_PREFIX = "[VIVI-MEMORY]"
 LAST_RUN_PATH = "/tmp/gmail_poller_last_run"
 
 import os
