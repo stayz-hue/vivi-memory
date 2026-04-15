@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-15
 
+#### 결정
+- 작업D 완료: ViviApp 사진/서류 수신 → Upstage 자동 연결. meeting-recorder server.py의 /upload-photo, /upload-document 핸들러를 doc_pipeline.process_document 직접 호출로 교체. 모든 사진/서류를 Upstage OCR+분류+필드추출 후 document_parse_results DB 저장 + Telegram 📎 서류수신 알림 발송. 원시 알림 제거. Upstage 실패 시 기존 webhook 폴백 유지. UPSTAGE_API_KEY를 /root/meeting-recorder/.env에 추가. 실 API 호출 검증 완료(confidence=1, viviapp_photo/viviapp_document source로 DB 저장).
+
 #### 현황
 - ViviApp 통화녹음 업로드 정상 동작 확인. nginx /recording-upload → 5113/upload-recording 이미 설정됨. FileWatcherService 생존 확인(오늘 09:13/09:18/09:33 업로드 성공). 업로드 안 된다는 신고는 특정 시간대 일시적 현상으로 판단, 수정 없음.
 
