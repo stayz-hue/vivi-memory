@@ -166,6 +166,23 @@
 - 통화녹음 1층 연결은 기존 웹훅 경로를 그대로 활용해서 2줄로 해결 — 새 경로 만들 필요 없었음
 - Upstage Document AI: Parse $0.01/page + Extract $0.03/page + Classify 무료(베타). $10 크레딧이면 250페이지 처리 가능
 
+#### 결정
+- 작업C 완료: 수신 중복알림 제거 + 발신 1층 처리
+  - bibi-gateway: kakao/sms/pc_kakao 원시 알림 제거 (photo/call/meeting은 유지)
+  - 발신 intent 4개 추가: request_contact, quote_estimate, follow_up, reply_info
+  - 발신 urgency=low 고정, reply_simple은 알림 생략
+  - 📤 발신 알림 포맷: 채널/상대방/케이스/intent/내용
+  - 검증 4건 전부 통과
+
+- 1층 이해(Comprehension) 레이어 전체 완성:
+  - 텍스트(카톡/문자): 수신 분류 + 발신 분류 + 스마트알림 ✅
+  - 통화녹음: STT → 1층 자동 연결 ✅  
+  - 서류/사진: Upstage Document AI 연동 ✅ (API키 실전 전환 완료)
+  - 중복알림 해결: 텍스트는 1층 알림만, 파일류는 원시 유지 ✅
+
+#### 인사이트
+- 1층은 "비비의 귀"에서 "비비의 이해력"으로 진화 — 단순 감지(0층)와 이해(1층)가 분리되어 각자 역할이 명확해짐
+
 ### 2026-04-14
 
 #### 결정
@@ -320,6 +337,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -328,6 +347,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
