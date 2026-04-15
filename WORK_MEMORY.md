@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 1층 2단계 완료: contact.py(contact-resolver 5111 연동, 실제 응답필드 contactId/displayName/isNew 맞춤), classifier.py(Kiwi 형태소+키워드 규칙, Gemini 폴백 구조 완성, 키 없으면 비활성), urgency.py(채널/의도/키워드 기반 4단계), pipeline.py 전체 파이프라인 연결. 테스트 5개 전부 통과: new_inquiry/document_submit/progress_check/simple_reply=정확, phone채널=immediate 정확. 규칙 분류 신뢰도 0.7~0.9 달성.
+
+#### 결정
 - 0층 모니터링 작업B+C 완료. B: /root/vivi_env/daily_report.py 생성, 매일 KST 09:00(UTC 00:00) 크론, 채널별 감지 건수+평일 0건 경고→bibi-gateway 웹훅→텔레그램. C: /root/vivi_env/e2e_test.py 생성, 매일 KST 06:00(UTC 21:00) 크론, 합성 메시지→파이프라인 검증→테스트 데이터 삭제→Bot API 직접 텔레그램 알림
 
 #### 결정
