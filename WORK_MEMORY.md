@@ -254,6 +254,58 @@
 - 분류 품질 (지인+고객 톤 구분): 규칙 기반으로 못 푸는 문제. 4층(기억) 이상에서 관계 맥락으로 해결 필요
 - 실전 검증 대기: 다음 카톡/통화녹음에서 unknown → 이름 전환 확인 필요
 
+#### 결정
+- 1층 품질 개선 3작업 병렬 완료 (2026-04-15):
+
+  작업A (pipeline.py):
+  - rawMessage [닉네임] 추출 → resolve_contact 연결 완료. sender_name 비어있을 때 대괄호 패턴 파싱
+  - 스팸 필터: 카카오페이/카카오뱅크/토스 등 공식채널 완전 무시
+  - "나에게 답장" 노이즈: 타임라인 저장만, 분류/알림 스킵
+  - CASE ID unknown 방어: 미매칭 시 이름 또는 순번으로 생성
+
+  작업B (contact_resolver.py):
+  - matching_log confirmed 우선 참조 추가. 대표님이 텔레그램에서 확인한 닉네임-연락처 매핑 자동 적용 (score 100)
+  - 기존 exact/partial/fuzzy 로직은 유지 (confirmed 없을 때 폴백)
+
+  작업C (meeting-recorder/server.py):
+  - extract_call_info() 함수 추가. 통화녹음 파일명에서 이름/번호 파싱
+  - form 필드 우선, 없으면 파일명 fallback
+  - webhook payload의 sender/sender_name에 파싱 결과 전달
+
+- 실제 payload 기반 검증 6건 전부 PASS
+- 과정에서 발견한 버그(스팸 이름 빈문자열 처리) 즉시 수정
+
+#### 이슈 (다음 작업)
+- DB 스키마 재배치 필요: timeline에 분류결과(category)/긴급도(urgency) 컬럼 없음. 1층 결과 저장 구조 논의 중
+- 분류 품질: 도메인 키워드 튜닝 필요 (지인+고객 캐주얼 톤 구분은 규칙 기반 한계, 4층 이상에서 해결)
+#### 결정
+- 1층 품질 개선 3건 완료 (작업A+B+C 병렬 실행):
+
+  작업A (pipeline.py):
+  - rawMessage에서 [닉네임] 추출 → resolve_contact에 name 전달
+  - 스팸 필터: 카카오페이/카카오뱅크/토스 등 공식채널 완전 무시
+  - "나에게 답장" 노이즈 → 타임라인만 저장, 분류/알림 스킵
+  - CASE ID unknown 방어: 미매칭 시 이름 또는 순번 사용
+
+  작업B (contact_resolver.py):
+  - matching_log confirmed 결과 우선 참조 (score 100 즉시 반환)
+  - 한 번 확인된 닉네임은 다시 묻지 않음
+
+  작업C (meeting-recorder/server.py):
+  - extract_call_info() 함수 추가: 통화녹음 파일명에서 이름/번호 파싱
+  - form 필드 우선, 없으면 파일명 fallback
+  - webhook payload의 sender/sender_name에 결과 반영
+
+- 검증: 실제 payload 6건 replay 테스트 전부 PASS
+- 과정 중 버그 1건 수정: bracket 추출 시 스팸 이름 처리 순서 오류
+
+#### 인사이트
+- 클코 테스트 시 가짜 payload 직접 만들지 말 것. 실제 로그에서 원본 replay가 진짜 테스트 (삽질방지 교훈 추가)
+
+#### 논의 중
+- DB 스키마 재배치 필요: timeline에 category/urgency 컬럼 없음, contacts에 kakaoNickname 누락 가능, unknown 케이스 정리 필요
+- 1층 분류 품질: 지인+고객 관계에서 업무/잡담 구분은 규칙으로 한계. 4층(기억) 이상에서 맥락 기반으로 잡아야 할 영역
+
 ### 2026-04-14
 
 #### 결정
@@ -424,6 +476,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -432,6 +486,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
