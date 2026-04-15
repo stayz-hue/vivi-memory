@@ -228,6 +228,29 @@
 - 연락처 매칭: 카톡 닉네임 [금윤미]가 contacts에 있는데도 unknown 표시. 1층 resolve가 닉네임 매칭 안 하고 있을 가능성
 - 분류 품질: 손해사정 도메인 키워드 미반영. "주치의 자문" → 기타로 분류. Kiwi 규칙 튜닝 필요 (대표님 도메인 지식 필요)
 
+#### 결정
+- 1층 품질개선 3개 작업 병렬 완료 (2026-04-15):
+
+작업A (pipeline.py):
+  - rawMessage [닉네임] 추출 → sender_name 비어있을 때 fallback
+  - 스팸 필터: 카카오페이/카카오뱅크/토스 등 공식채널 완전 무시 (저장/분류/알림 전부 스킵)
+  - "나에게 답장" 노이즈 필터: 타임라인만 저장, 분류/알림 스킵
+  - CASE ID unknown 방어: contactId앞8자 → name앞3자 → 순번(001~)
+
+작업B (contact_resolver.py):
+  - resolve_contact 진입 시 matching_log confirmed 우선 조회
+  - 대표님이 텔레그램에서 확인한 닉네임-연락처 매핑 자동 적용 (score 100)
+  - confirmed 없으면 기존 exact/partial/fuzzy 로직 그대로
+
+작업C (meeting-recorder/server.py):
+  - extract_call_info() 함수 추가: 통화녹음 파일명에서 이름/번호 파싱
+  - form 필드 우선, 없으면 파일명 fallback
+  - webhook payload sender/sender_name에 파싱 결과 반영
+
+#### 이슈 (미해결)
+- 분류 품질 (지인+고객 톤 구분): 규칙 기반으로 못 푸는 문제. 4층(기억) 이상에서 관계 맥락으로 해결 필요
+- 실전 검증 대기: 다음 카톡/통화녹음에서 unknown → 이름 전환 확인 필요
+
 ### 2026-04-14
 
 #### 결정
@@ -396,6 +419,8 @@
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -404,6 +429,8 @@
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
