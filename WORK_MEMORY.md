@@ -9,6 +9,9 @@
 ### 2026-04-15
 
 #### 결정
+- 기억 인프라 연동 완료(Phase 0~4). Phase0: 작업A 수동 커맨드 롤백. Phase1: honcho_client.py(Honcho v3 세션 기록). Phase2: graphiti_client.py(Graphiti 지식 그래프 메시지 추가). Phase3: case_manager.py(상담 키워드 감지→케이스 자동 생성, 수수료 키워드→종결 전환) + pipeline.py 통합 + ucansign_webhook.py(서명 완료→진행중 전환). Phase4: case_churn_detector.py(상담중 3일 무연락 크론, UTC 00:00=KST 09:00). 검증: 교통사고 키워드 수신→CASE-20260415-001 자동 생성+Honcho 세션 생성 확인.
+
+#### 결정
 - 작업A 완료: cases 테이블 재설계 + OO 상담 텔레그램 커맨드 구현. cases에 case_types(TEXT), accident_date(DATE), updated_at(TIMESTAMP), created_at(TIMESTAMP) 4개 컬럼 추가. bibi-gateway/server.py에 /webhook/telegram 엔드포인트 + handle_consultation_command() 함수 추가. 텔레그램 웹훅 https://stayz90.com/webhook/telegram 등록. 대표님(8772819343)이 OO 상담 입력 시 케이스 자동 생성, contacts 이름 매칭으로 contact_id 자동 연결, 중복 케이스 방지. 검증 완료(3개 테스트 통과).
 
 #### 결정
