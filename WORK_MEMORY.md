@@ -1385,6 +1385,46 @@ Elite Fighting 웹앱에서 보험 조회
 - Gmail 드래프트 WORK_MEMORY 파이프라인 제목 형식 확인 필요 항목 제거
 - 이유: 실제 작동 검증 완료 (드래프트 여러 번 성공)
 
+#### P4-1 전체 완료 (2026-04-16)
+
+#### 완료 단계
+- Step 1: DDL 3개 테이블 (insurer_outcomes, fee_settlements, auto_detection_log)
+- Step 2: contact_name_parser.py (display_name 기반)
+- Step 3: outcome_detector.py (이벤트 ① 보험사 합의 종결)
+- Step 4: fee_received_detector.py (이벤트 ③ 고객 송금 통보)
+- Step 5: detection_entrypoint.py + pipeline.py 훅
+- Step 6: server.py 텔레그램 콜백 핸들러 2개
+- Step 7: 6시나리오 전부 PASS
+- Step 8: 문법검사 OK, bibi-gateway 재시작 active
+
+#### 현재 가동 상태
+- 담당자(role_hint='담당자') 발신 메시지에서 합의+금액 키워드 트리거 → 이벤트 ① ASK
+- 고객 발신 메시지에서 송금 키워드 트리거 → 이벤트 ③ ASK
+- 대표님 텔레그램 버튼 1회 → 자동 레코드 생성 + auto_detection_log 정답 라벨
+- 실운영 첫 자연 발생 케이스 대기 중
+
+#### 오늘 전체 세션 누적 산출
+1. P3 1단계 완료 (사건 매칭 로직, case_matching_log 가동)
+2. doc_pipeline.py 0바이트 손상 복구
+3. P4 설계 2번 전환 (accident→case, 명령어→관찰기반)
+4. 사건 엔티티 실제 저장 위치 발견 (layer1_messages.case_id TEXT 태그)
+5. P4-1 전체 완료 (insurer_outcomes/fee_settlements = 사건 메타데이터 첫 저장 테이블)
+6. 메모리 구조 개선 (#22 제거, #29 강제절차 격상, #30 헬스모니터 추가)
+
+#### 다음 우선순위
+1. 실운영 모니터링 — 자연 발생 케이스 나오는지 며칠 관찰
+2. 알리고 API 연동 (대표님 사업자 인증 후) → 이벤트 ② 대체 경로
+3. 헬스모니터 구현 (크론잡 + 에러 알림) — 메모 #30
+4. case_matching_log / auto_detection_log 쌓이면 신호 가중치 튜닝
+5. Haiku 폴백 P4-2 설계
+
+#### 보류 중 과제
+- 사고유형별 종결보고서 구조 (TA/일배/생상/산재)
+- Q6 수수료 안내 문자 템플릿
+- 담당자 승계 자동화 (바뀐/최종/최종최종)
+- 대면 녹음 (센터장님 구두 통보 감지) — 장기
+- 사건 엔티티 정식 테이블 (Phase 2 재설계 영역)
+
 ### 2026-04-15
 
 #### 결정
@@ -2281,6 +2321,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -2289,6 +2331,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
