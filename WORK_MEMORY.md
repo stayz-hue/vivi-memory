@@ -1338,6 +1338,50 @@ Elite Fighting 웹앱에서 보험 조회
 - 대표님 내일 사업자 인증 후 API 키 수령 예정
 - P4 이벤트 ② 대체 경로는 그 시점 이후 재논의
 
+#### 옵션 2 조사 결과 (2026-04-16)
+
+#### 대발견
+- 자연 발생 사건 엔티티 저장 위치: layer1_messages.case_id TEXT 필드
+- accidents, cases_legacy 둘 다 0행 — 사건은 DB 엔티티가 아니라 메시지에 붙는 태그
+- case_id 포맷: CASE-YYYYMMDD-{suffix}
+  - suffix 종류: contact_id[:8] (예: CASE-20260415-CON-0315), name[:3] (예: CASE-20260416-조대근), 날짜순번 (예: CASE-20260416-156)
+- 생성 위치: /root/vivi-layer1/pipeline.py:143 generate_case_id()
+- 저장 함수: insert_layer1_message()
+
+#### 혼란의 정체 설명됨
+- 참조본 v2, 유저 메모리, WORK_MEMORY 전부 "cases" 단어를 썼지만 실제 구현은 layer1_messages.case_id TEXT 필드로 정착
+- P3 _try_match_case 임베딩 매칭이 돌 수 있었던 이유: "어느 case_id 태그 붙일지" 판단이었음. accidents 0행이어도 문제 없음
+
+#### P4-1 설계 최종 확정
+- insurer_outcomes.case_id = TEXT, FK 없음, CASE-YYYYMMDD-xxx 포맷 받음
+- fee_settlements.case_id = 동일
+- UNIQUE(case_id, insurer_name) 제약 유지
+- 담당자별 사건 조회: SELECT DISTINCT case_id FROM layer1_messages WHERE contact_id = ?
+- 담당자에 사건 2개 이상이면 P3 ASK 패턴 동일 적용
+- 검증: layer1_messages 실 통화 record replay (금윤미 대인 최종 담당자 CON-0064 포함)
+
+#### P4-1이 갖는 의미
+- insurer_outcomes / fee_settlements = 사건 단위 메타데이터 저장의 첫 번째 정식 테이블
+- 지금까지 사건은 메시지 태그(TEXT)로만 존재 → P4-1 이후 종결/정산 메타데이터 보유
+- 미래 Phase 2에서 accidents 정식 채택 시 기존 case_id TEXT 그대로 연결 유지 (FK 없음 덕분)
+- 우연히 깨끗한 설계 진화 경로 확보
+
+#### Step 1 DDL 이후 추가 멈춤 신호
+- insurer_outcomes / fee_settlements / auto_detection_log 3개 테이블 생성 후 \d 출력 보고
+- 대표님 이중 확인 후 Step 2 진입
+- 오늘 2번의 전제 오류 교훈 반영 — Step 0 한 번만이 아니라 Step 1 후에도 한 번 더 멈춤
+
+#### 메모 #30 추가
+- 버그/헬스 모니터링 추가 작업 예정 (P4-1 완료 후)
+- (1) 헬스체크 크론잡 5분마다 (포트 전체 + 다운 시 텔레그램 + 일일 리포트)
+- (2) 에러 알림 훅 (Python 로깅 ERROR+ 텔레그램 또는 Sentry)
+- 별도 '층' 만들지 않음 (데이터 흐름 밖 관측기)
+- 명칭: 헬스모니터 / 비비 파수꾼
+
+#### 메모 #22 제거
+- Gmail 드래프트 WORK_MEMORY 파이프라인 제목 형식 확인 필요 항목 제거
+- 이유: 실제 작동 검증 완료 (드래프트 여러 번 성공)
+
 ### 2026-04-15
 
 #### 결정
@@ -2228,6 +2272,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -2236,6 +2282,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
