@@ -448,6 +448,35 @@ PC카톡/폰카톡 발신
 - 작업 4: 이름만 → 컨텍스트 버튼 UX (실전 경험 쌓인 후)
 - 판례 content 청킹 (벌크 완료 후)
 
+#### 결정
+- 작업 B 완료: honcho-deriver unhealthy 복구
+  - 원인: 시나리오 C (헬스체크 정의 오류). 이미지 기본 헬스체크가 http://localhost:8000/health 호출하는데 deriver는 HTTP 서버 없는 백그라운드 워커라 항상 실패
+  - 실제 기능: 2일간 정상 작동 (sync_vectors 5분마다, cleanup_queue 정상)
+  - 해결: ls /proc/1/exe 기반 프로세스 생존 헬스체크로 교체 (pgrep은 이미지에 미포함)
+  - 현재: vivi-honcho-deriver Up (healthy)
+  - 기억 인프라 전체 healthy: Honcho API / deriver / Graphiti / Neo4j / Qdrant / pgvector
+
+#### 인사이트
+- 헬스체크 실패가 항상 "서비스 죽음"을 의미하지 않음. 로그에서 실제 기능 확인 후 판단 필요
+- 이미지 기본 헬스체크가 실제 서비스 구조와 맞지 않을 수 있음 → docker-compose.yml로 오버라이드 필수
+
+#### 이슈 (기록만, 당장 대응 불필요)
+- docker-compose 1.29.2 + 신규 Docker ContainerConfig 호환성 버그 확인
+- 이번엔 docker run 직접 재생성으로 우회했으나, 향후 다른 컨테이너 재생성 시 동일 이슈 재발 가능
+- 대응 옵션: (1) docker-compose v2로 업그레이드 (docker compose plugin) (2) 우회 스크립트 유지
+- 우선순위: 낮음 (다른 컨테이너 재생성 시점에 해결)
+
+#### 현황
+- 오늘 전체 작업 완료: Phase 1-C1 + MinIO URL + 작업1 알림 + 작업2 소급생성 + 작업3 Hermes 라우터 + 작업5 contact_id NULL 해결 + 작업B deriver 복구
+- 기억 인프라 전체 정상
+- 판례 벌크 로드 계속 진행 중
+
+#### 다음
+- C1-2: 유캔싸인 자동 트리거 + Hyphen API 연동 (소득조회/보험계약조회)
+- C1-3: 진단서 OCR → 상병명/진단명 분류
+- 판례 content 청킹 (벌크 완료 후)
+- 작업 4 (이름→컨텍스트 버튼) — 실전 경험 쌓인 후
+
 ### 2026-04-15
 
 #### 결정
@@ -1286,6 +1315,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1294,6 +1325,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
