@@ -88,6 +88,30 @@
 #### 이슈
 - 벌크 설치 exit code 1 뜬 건 해결됨 (pip 성공, __version__ 속성만 없어서 발생 - 실제 동작 OK)
 
+#### 결정
+- 클코 2-A 완료: 판례 Qdrant 증분 로드 인프라 구축 + 벌크 시작
+  - precedents 테이블 구조: issues=판시사항, summary=판결요지, content=판례전문 (전부 영문 컬럼명)
+  - 텍스트 길이: summary 평균 164자, content 평균 2929자
+  - 임베딩 전략: issues+summary 우선 (1차 로드). content 전문은 제외 (추후 청킹 별도 작업)
+  - qdrant_indexed + qdrant_indexed_at 컬럼 추가
+  - Qdrant collection "precedents" 생성 (768dim, Cosine, HNSW)
+  - /root/vivi-layer1/precedent_loader.py 생성 (ko-sroberta 배치 임베딩 + qdrant_client 신버전 query_points API 대응)
+  - 시스템 python 사용 (vivi_env 없음, sentence_transformers 기설치)
+  - 속도 4.9건/s 측정 (100건 테스트)
+  - 크론 등록: 매일 02:00 KST, 5000건/회
+  - 벌크 로드 실행 중: PID 1029755, 85000건 약 4.8시간 예상 (저녁 완료)
+
+#### 인사이트
+- ko-sroberta CPU 배치 임베딩 4.9건/s가 실용 속도 기준점. 17만건 전체는 약 10시간 수준
+- 전문(content 평균 2929자)은 max token 초과 가능성 커서 1차는 요약+판시만 넣는 게 정석. 청킹은 검색 정확도 개선 필요할 때 별도 작업
+
+#### 이슈
+- WORK_MEMORY 동기화 문제: Gmail → VPS 수거 → 병합 → git push까지는 성공하나 stayz90.com이 GitHub 최신을 못 따라옴. Claude.ai 대화 시작 시 web_fetch하는 stayz90.com 주소가 stale 상태. nginx 캐시 or 로컬 파일 동기화 이슈 추정. 확인 필요
+
+#### 현황
+- 클코 2-A 완료, 벌크 로드 진행 중 (저녁 완료 예정)
+- 다음: 클코 2-B(검색 API + 1층 파이프라인 연결) 준비 or WORK_MEMORY 동기화 이슈 해결
+
 ### 2026-04-15
 
 #### 결정
@@ -890,6 +914,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -898,6 +924,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
