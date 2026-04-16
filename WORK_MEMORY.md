@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- 작업1+2 완료. 작업1: /notify 엔드포인트는 text키(message 아님) 사용, 200 정상 처리 확인. 발신 경로 정상. 작업2: case_manager detect_and_transition에 소급 생성 로직 추가 — accident 없음+영상판독지 발신 감지 시 자동 accident 생성+즉시 서류요청 전환. pipeline _handle_case_result에 accident_created_and_transitioned action 알림 추가. 시나리오A(소급),C(회귀) 모두 PASS. trigger_type=auto_keyword_retroactive로 일반전환과 구분.
+
+#### 결정
 - Phase 1-C1 cs_generator end-to-end 검증 완료. 유민(CON-0148) 테스트: 파일생성 2604-TA-유민-미정-배승휴.xlsx, 암호*9118 적용, MinIO업로드, presigned URL HTTP 200, 기초사항 B8=유민/B17=TA/B16=2026-03-15/B12=상동 정상 채움. 보험사B58=None(claims 없어서 정상). 의뢰서 시트 수식참조 확인. 테스트데이터 정리 완료.
 
 #### 결정
