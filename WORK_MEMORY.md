@@ -1268,6 +1268,37 @@ Elite Fighting 웹앱에서 보험 조회
 - 명령어 UX 폐기 후 실제 설계가 훨씬 복잡해지지만, 대표님 실제 삶에 부담 0으로 들어가려면 이 방향이 맞음
 - 이벤트 ② 감지 부재가 이벤트 ③ 부트스트랩 UX를 만들어냄 — 제약이 설계를 단순화한 사례
 
+#### P4-1 Step 0 재검증 결과 반영
+
+#### 재검증으로 드러난 DB 실제 구조
+- cases 테이블 없음 (to_regclass NULL)
+- cases_legacy 존재, 0행
+- accidents 존재, 0행
+- documents(Honcho), layer1_messages, case_matching_log, document_parse_results, customer_insurance, customer_income 등 존재
+- P3 산출물 case_signal_scorer.py는 cases_legacy + layer1_messages 참조 (cases 사용 X)
+- P3 case_matching_log.predicted_case_id 도 FK 없는 TEXT
+
+#### P4-1 설계 조정 확정
+- A) insurer_outcomes/fee_settlements의 case_id를 TEXT 자유 필드로 유지. FK 없음. accidents든 cases_legacy든 어느 테이블 참조인지 스키마 레벨 고정 안 함. 사건 저장 구조 결정은 Phase 2 재설계 영역으로 분리.
+- B) Step 2 파서 입력을 contacts.display_name 기준으로 변경. person_type 의존 제거. 역할 판정은 role_hint 기반 (담당자 / 고객 폴백).
+- C) 테스트 데이터 삽입 금지. 유닛 테스트(Python dict payload) + layer1_messages id=64 replay로 검증 대체. accidents 빈 상태 유지.
+
+#### 추가 조사 항목 (Step 0 보충)
+- accidents, cases_legacy 스키마 확인
+- document_parse_results, customer_insurance, customer_income 중 사건 단위 레코드 저장 테이블 존재 여부
+
+#### Claude 누락 사항
+- P3 1단계 보고서 세부(case_signal_scorer.py가 cases_legacy 참조)를 놓치고 cases 테이블 존재 전제로 P4 지시서 작성함
+- 메모리 #29 적용 실패 — 실제 DB 현황 확인을 참조본 단어(cases)보다 우선시해야 함
+
+#### 보류 사항
+- 알리고 API 연동(이벤트 ② 대체 경로): 대표님이 내일 사업자 인증 후 API 키 수령 예정. 그때까지 보류.
+
+#### 미해결 본질 이슈
+- 현재 사건 단위 데이터가 실제로 어디에 저장되는지 불명확 (accidents 0행, cases_legacy 0행)
+- P3 매칭이 동작하긴 하지만 자연 발생 사건이 어디로 들어가는지 확인 필요
+- Phase 2 규모로 사건 저장 구조 재설계 필요성 대두
+
 ### 2026-04-15
 
 #### 결정
@@ -2154,6 +2185,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -2162,6 +2195,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
