@@ -48,6 +48,22 @@
   - 검증 시나리오 6개 통과, 기존 0층 /webhook/bibi-incoming 무변경 확인
   - Phase 1-B 진행 예정: pipeline.py 연결 + ucansign + deadline_tracker
 
+#### 결정
+- Phase 1-B 완료: 파이프라인 연결 + 유캔싸인 + 기일 추적
+  - pipeline.py에 detect_and_transition 연결 (_memory_enabled: True) — 매 메시지마다 자동 전환 체크
+  - ucansign_webhook.py accidents 2층 구조 전환 — 수임계약서 서명 → 장해대기 자동 전환 확인
+  - deadline_tracker.py 생성 (check_deadlines_and_alert, check_missing_documents, check_idle_cases)
+  - cron 3개 등록 (평일 09:00 기일 D-3 / 평일 10:00 서류 7일 초과 / 월요일 10:00 장기 미처리 14일 초과)
+  - 검증 4개 전부 PASS
+- Phase 1 (Cases 재설계) 전체 완료 — 1-A(DB 2층 + case_manager + 텔레그램) + 1-B(파이프라인 + 유캔싸인 + 기일추적)
+
+#### 인사이트
+- 비비가 크론으로 스스로 행동 시작. 대표님 개입 없이 매일 자동 체크 + 알림
+
+#### 현황
+- 통합재설계 기준 클코 1 완료 (서류 자동 생성은 제외됨 — 양식 파일 필요)
+- 다음 후보: 클코 2(판례 Qdrant) / Phase 1-C(서류 자동 생성) / 클코 3(코칭 시스템)
+
 ### 2026-04-15
 
 #### 결정
@@ -846,6 +862,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -854,6 +872,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
