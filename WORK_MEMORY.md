@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-16
 
+#### 결정
+- Phase 1-A 완료: 케이스 DB 2층 구조 구현. accidents+claims+status_history+deadlines+pending_actions 테이블 생성. cases→cases_legacy 리네임. case_manager.py 전면 재작성(CRUD+서류체크리스트+자동전환감지+대시보드, psycopg v3 스타일). bibi-gateway 텔레그램 커맨드 추가: OO상담→accidents 생성, OO상태→현황조회, 현황→대시보드. /webhook/telegram 라우트 신규 추가. hermes venv에 psycopg[binary]+psycopg-pool 추가 설치. 검증 6개 시나리오 통과. Phase 1-B 대기: pipeline.py 연결(자동전환 실시간감지)+ucansign 연결+deadline_tracker.py
+
 #### 인사이트
 - 비비 코어 루프는 2트랙이어야 함: 트랙A(사용자 피드백 기반 = 거울) + 트랙B(객관적 데이터 기반 = 참모). 사용자 경험만으로 학습하면 대표님 현재 판단 수준에 비비가 갇힘
 - 트랙A: 스타일/톤/업무순서/선호도 → 대표님 피드백이 정답
