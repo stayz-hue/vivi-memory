@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- Phase 1-C1 완료: CS파일 엑셀 자동 생성. /root/vivi-layer1/cs_generator.py 생성(원본 템플릿 복호화→기초사항 채움→암호*9118→MinIO업로드). 셀매핑: B6=accident_id, B7=수임일, B8=성명, B9=핸폰, B10=주소, B16=재해일시, B17=사고유형, B19=사고내용, B58-60=보험사정보. msoffcrypto encrypt 정상동작. bibi-gateway 텔레그램 커맨드 추가(OO CS파일/CS OO/OO CS 만들어줘). 검증: 생성+암호복호화+셀값 PASS, 에러케이스 PASS. openpyxl+msoffcrypto+minio 시스템파이썬+hermes venv 양쪽 설치.
+
+#### 결정
 - 클코 2-B 완료: 판례 검색 API + 1층 파이프라인 연결. /root/vivi-layer1/precedent_search.py 생성(search_precedents/search_for_document/format_results_telegram, qdrant query_points API). doc_pipeline.py에 유사 판례 자동 검색 연결(OCR 완료 후 parsed_txt 기반, VIVI_AUTO_PRECEDENT 스위치). bibi-gateway server.py에 판례 커맨드 추가(판례 XXX / XXX 판례). qdrant_client를 hermes venv에도 설치. 검증: 보험금지급지연 0.63, 자동차사고과실비율 0.64. 모든 서비스 정상.
 
 #### 결정
