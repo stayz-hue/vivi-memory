@@ -404,6 +404,43 @@
 - PC카톡 발신 감지는 정상, 다만 contact 미등록 시 pipeline 통과 못 함
 - 실제 end-to-end 완주는 작업 5 이후에 가능
 
+#### 결정
+- 작업 5 완료: contact_id NULL 근본 해결
+  - pipeline.py의 _ensure_contact_exists를 contact_resolver HTTP /resolve 호출로 교체
+  - contact_resolver.resolve_contact가 이미 name-only 지원 — 별도 헬퍼 추가 불필요
+  - 중복 방지 검증: 동일 이름 2회 호출 시 같은 CON-XXXX 반환
+  - end-to-end 검증: action=accident_created_and_transitioned 확인
+
+#### 전체 파이프라인 (최종)
+PC카톡/폰카톡 발신
+  → 0층 감지 (ViviApp 또는 PC kakaotalk_monitor.py)
+  → bibi-gateway /webhook/bibi-incoming
+  → vivi-layer1 pipeline
+  → contact_id 없으면 _ensure_contact_exists (HTTP contact_resolver /resolve)  [작업5]
+  → detect_and_transition
+  → accident 소급 생성 + 서류요청 전환  [작업2]
+  → 텔레그램 알림  [작업1 — 발신 경로 확정]
+  → 대표님이 텔레그램에 "챗봇폰 상태" 입력
+  → Hermes 라우터 키워드 매칭  [작업3]
+  → bibi-gateway /internal/command → handle_telegram_command
+  → 응답 즉시 반환 (LLM 호출 0)
+
+#### 인사이트
+- "대표님 행동 변화 0" 원칙을 실전 엣지케이스(미등록 번호)까지 확장
+- 모든 0층 감지 경로(ViviApp 모바일 카톡, PC kakaotalk_monitor, 문자 등)가 1층 자동화에 일관되게 연결됨
+- 결정론적 라우터 + LLM 폴백 구조로 비용 0 + 즉시 응답 + 자유대화 Hermes 유지 동시 달성
+
+#### 현황
+- Phase 1 자동화 메인 파이프라인 완전 가동 (0층 감지 → 1층 분류/이해/전환 → 알림 → 3층 수동 명령)
+- 판례 벌크 로드 계속 진행 중 (저녁 완료 예정)
+- 모든 서비스 active
+
+#### 다음 후보
+- C1-2: 유캔싸인 자동 트리거 + Hyphen API 연동 (소득조회/보험계약조회)
+- C1-3: 진단서 OCR → 상병명/진단명 + 후유장해/진단금/사망 분류
+- 작업 4: 이름만 → 컨텍스트 버튼 UX (실전 경험 쌓인 후)
+- 판례 content 청킹 (벌크 완료 후)
+
 ### 2026-04-15
 
 #### 결정
@@ -1238,6 +1275,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1246,6 +1285,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
