@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- MinIO presigned URL 외부 접근 수정 완료. cs_generator.py + doc_pipeline.py MINIO_ENDPOINT를 localhost:9000 → 84.247.153.89:9000으로 변경. minio/.env에 MINIO_SERVER_URL=http://84.247.153.89:9000 추가. presigned URL 외부IP 포함 확인. bibi-gateway 재시작 완료.
+
+#### 결정
 - Phase 1-C1 완료: CS파일 엑셀 자동 생성. /root/vivi-layer1/cs_generator.py 생성(원본 템플릿 복호화→기초사항 채움→암호*9118→MinIO업로드). 셀매핑: B6=accident_id, B7=수임일, B8=성명, B9=핸폰, B10=주소, B16=재해일시, B17=사고유형, B19=사고내용, B58-60=보험사정보. msoffcrypto encrypt 정상동작. bibi-gateway 텔레그램 커맨드 추가(OO CS파일/CS OO/OO CS 만들어줘). 검증: 생성+암호복호화+셀값 PASS, 에러케이스 PASS. openpyxl+msoffcrypto+minio 시스템파이썬+hermes venv 양쪽 설치.
 
 #### 결정
