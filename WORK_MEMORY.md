@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- P4-1 합의종결/수수료수령 자동감지 완료. 신규파일: contact_name_parser.py(is_adjuster), outcome_detector.py(이벤트①), fee_received_detector.py(이벤트③), detection_entrypoint.py(pipeline훅). 수정: pipeline.py 훅삽입, server.py 콜백핸들러2개추가. 신규테이블3개: insurer_outcomes/fee_settlements/auto_detection_log. 검증 6시나리오 전부PASS. bibi-gateway/vivi-layer1 재시작 active.
+
+#### 결정
 - P3 사건매칭 1단계 완료. case_matching_log/document_type_rules 테이블 생성, case_signal_scorer.py 뼈대(enhanced_match: override>embedding>ASK), doc_pipeline.py 복구+P3훅, server.py에 callback_query 핸들러(_handle_case_match_callback) 추가. bibi-gateway 재기동 active. 신호1/2 플레이스홀더(데이터 없음), 실서비스 서류 유입 시 ASK 흐름 자동 활성화 예정. 보고서: /root/claude_work/20260416_p3_1st_summary.md
 
 #### 결정
