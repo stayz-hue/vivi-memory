@@ -379,6 +379,28 @@
 - 0층 감지 경로가 여러 개인데 (ViviApp 모바일 카톡, PC kakaotalk_monitor, 문자 등) 각 경로가 1층(pipeline.py + case_manager)에 동일한 인터페이스로 연결돼 있는지 일관성 재검증 필요
 - 이 작업에서 Phase 1-B 연결 시 ViviApp 카톡 기준으로만 테스트했을 가능성 → PC카톡/문자 경로도 직접 검증 필요
 
+#### 이슈
+- PC카톡 발신 감지 → case_manager 소급 생성 실패 원인 확정:
+  - layer1_messages의 contact_id NULL
+  - pipeline.py 조건: `if _memory_enabled and not is_group and contact_id and contact_id not in ("unknown", "")` → NULL일 때 _memory_task 미실행
+  - "챗봇폰"이 contacts에 미등록이라 contact_resolver가 매칭 실패
+  - pc_kakao/outgoing으로 분류까지는 정상, 메모리 단계에서 끊김
+
+#### 인사이트 (중요)
+- 이것은 테스트 데이터 문제가 아닌 설계 엣지케이스
+- 실제 업무: 대표님이 소개받은 번호를 저장하기 전에 먼저 카톡으로 영상판독지 안내 보낼 수 있음 → 이 때도 contact_id NULL이라 자동화 작동 안 함
+- 비비 철학 "대표님 행동 변화 0"과 어긋나는 지점. 근본 해결 필요
+
+#### 결정 제안
+- 작업 5: pipeline.py에 contact_id NULL 시 sender_name + phone_number 기반 auto-create 로직 추가
+- contact_resolver의 기존 헬퍼 활용 또는 get_or_create_contact 추가
+- 구현 난이도 15분
+
+#### 현황
+- PC kakaotalk_monitor.py 재실행 복구 완료 (대표님 PC 관리자 터미널)
+- PC카톡 발신 감지는 정상, 다만 contact 미등록 시 pipeline 통과 못 함
+- 실제 end-to-end 완주는 작업 5 이후에 가능
+
 ### 2026-04-15
 
 #### 결정
@@ -1211,6 +1233,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1219,6 +1243,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
