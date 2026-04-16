@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- C1-2-2 cs_generator 확장 완료. fetch_active_insurance()/fetch_latest_income() 추가, fill_worksheet() B66(직업)/B67(월소득)/A89~E98(보험10행) 자동채움, generate_cs_file() 통합, format_cs_result_telegram() 자동채움 요약 강화. server.py에 _elite_regenerate_cs_if_active() 추가 - 보험/소득 웹훅 저장 후 활성사건 있으면 CS파일 자동재생성. 검증: CON-0322 fetch_active_insurance 9건 정상, 사건없음→cs_regen_skip 정상, webhook 200 OK.
+
+#### 결정
 - C1-2-1 완료: Elite Fighting 웹훅 수신 + 신규 테이블 + AES 암호화
 - AES-256 키 systemd Environment 주입 (bibi-gateway/vivi-layer1 양쪽, VIVI_AES_KEY)
 - /root/vivi-layer1/crypto_helper.py 생성 (encrypt_jumin/decrypt_jumin + encrypt_bytes/decrypt_bytes)
