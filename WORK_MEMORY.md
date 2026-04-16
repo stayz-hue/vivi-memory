@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- 클코 2-B 완료: 판례 검색 API + 1층 파이프라인 연결. /root/vivi-layer1/precedent_search.py 생성(search_precedents/search_for_document/format_results_telegram, qdrant query_points API). doc_pipeline.py에 유사 판례 자동 검색 연결(OCR 완료 후 parsed_txt 기반, VIVI_AUTO_PRECEDENT 스위치). bibi-gateway server.py에 판례 커맨드 추가(판례 XXX / XXX 판례). qdrant_client를 hermes venv에도 설치. 검증: 보험금지급지연 0.63, 자동차사고과실비율 0.64. 모든 서비스 정상.
+
+#### 결정
 - 클코 2-A 완료: 판례 Qdrant 증분 로드 구축. precedents 테이블에 qdrant_indexed/qdrant_indexed_at 컬럼 추가. Qdrant collection precedents 생성(768dim, cosine, HNSW m=16). /root/vivi-layer1/precedent_loader.py 생성(ko-sroberta 배치 임베딩+Qdrant upsert+증분 마킹, issues+summary 우선). 크론 등록: 매일 02:00 KST(UTC 00:00) 5000건. 속도: 4.9건/s(모델로드제외). 유사검색 테스트 PASS(query_points API). 백그라운드 벌크로드 시작(PID 1029755, 현재 85,779건 처리중, 약 7.7시간 소요 예상).
 
 #### 결정
