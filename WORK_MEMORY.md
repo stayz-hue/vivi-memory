@@ -6,6 +6,11 @@
 ---
 
 ## [최근 3일]
+### 2026-04-17
+
+#### 결정
+- ucansign_webhook.py 패치 2건 적용 완료. ①ALL_SIGNED_EVENTS에 signing_completed_all 추가(누락 복구). ③_transition_case_on_sign 내 장해대기 전환 후 generate_cs_file 자동 호출 추가. 단위 테스트 통과(fixture INSERT→전환→CS생성→DELETE). 패치②(메시지 수신 시 상담중 자동생성)는 보류 - 자동화 전제조건 미비.
+
 ### 2026-04-16
 
 #### 결정
