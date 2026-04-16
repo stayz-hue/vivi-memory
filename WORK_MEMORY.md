@@ -558,6 +558,61 @@ Honcho API / deriver / Graphiti / Neo4j / Qdrant / pgvector 전부 정상
 - /mnt/user-data/outputs/Elite_Fighting_GAS_v2_for_vivi.gs (배포 완료)
 - /mnt/user-data/outputs/c1_2_design_draft.md (내일 작업 기초)
 
+#### 최종 현황 (2026-04-16 23:00 마감)
+- 판례 Qdrant 벌크 로드 완료: 98,042 vectors
+- collect.py recent 크론 2개 실시간 증분 수집 중 — 앞으로도 계속 증가 (비비Law 데이터 축적 실증)
+- 내일 작업: content 청킹으로 검색 정확도 향상 가능 (현재 issues+summary만 임베딩, 유사도 0.69 → 0.8+ 가능)
+
+#### 오늘 완료 9건
+1. Phase 1-C1 — CS파일 엑셀 자동 생성 (원본 템플릿 + 암호화 + MinIO + 파일명 규칙)
+2. MinIO URL 외부 접근 수정
+3. 작업 1 — 자동 알림 발신 경로 확정 (/notify text 키)
+4. 작업 2 — case_manager 소급 accident 생성 로직
+5. 작업 3 — Hermes 라우터 Phase 1 (9/9 PASS)
+6. 작업 5 — contact_id NULL 근본 해결
+7. 작업 B — honcho-deriver unhealthy 복구
+8. 테스트 데이터 전체 정리 (PG + Honcho + Graphiti + MinIO)
+9. Elite Fighting GAS v2 배포 완료 (비비 웹훅 도달 검증: 10:41:04 Google IP 35.187.134.96)
+
+#### end-to-end 완주 증명
+PC카톡 "영상판독지 영상CD 부탁드려요" → 8초 후 텔레그램 "🆕 챗봇폰님 신규 사고 자동 감지 ACC-20260416-002 서류요청"
+→ "챗봇폰 상태" → "👤 챗봇폰님 현황 ACC-20260416-002 (서류요청) 서류: 2종 중 0종"
+14단계 자동화 체인 LLM 호출 0회 작동
+
+#### 기억 인프라 전체 healthy
+Honcho API / deriver / Graphiti / Neo4j / Qdrant(98K vectors) / pgvector
+
+#### 비비 UX 3층 위계 확립 (메모리 반영 완료)
+1층 자동추론(메인) → 2층 애매시 버튼 1번 물어봄 → 3층 수동명령(이름만)
+설계 1순위 원칙: 결정론적 코드 앞, LLM 자연어 폴백
+
+#### 내일 C1-2 시작점
+- GAS v2 배포 완료, 웹훅 도달 검증 끝
+- bibi-gateway에 /webhook/elite_insurance + /webhook/elite_income 엔드포인트 구현
+- 신규 테이블 3개: customer_insurance, customer_income, customer_sensitive (AES)
+- cs_generator fill_worksheet에 보험/소득 데이터 인자 확장 (B66/B67/B89~E98)
+- 텔레그램 알림 통합
+
+#### 차기 과제 순서
+1. C1-2 (내일)
+2. 판례 content 청킹 (벌크 완료됨, 내일 병렬 가능)
+3. C1-3 (진단서 OCR → 상병명/진단명 분류)
+4. 작업 4 (이름→컨텍스트 버튼) — 실전 2~3일 후
+5. docker-compose 1.29.2 호환성 (낮음)
+6. query_customer_status 정렬 개선 (낮음)
+7. Google Drive → MinIO 완전 이전 (2~3주)
+8. API 월 상한 설정 ($10 limit) — 대표님 할일
+
+#### 오늘 쓴 작업지시서 (내일 세션 참고)
+- claude_task_1_2_notify_retroactive.md
+- claude_task_3_hermes_router.md
+- claude_task_5_contact_autocreate.md
+- claude_task_B_honcho_deriver.md
+- 클코_C1_1_CS파일자동생성_v2_원본템플릿.md
+- 클코_MinIO_URL_정석수정.md
+- Elite_Fighting_GAS_v2_for_vivi.gs (배포됨)
+- c1_2_design_draft.md
+
 ### 2026-04-15
 
 #### 결정
@@ -1402,6 +1457,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1410,6 +1467,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
