@@ -244,6 +244,28 @@
 - 선행 과제: 텔레그램 라우팅 이슈 (Hermes vs bibi-gateway)
 - 다음: C1-2 (유캔싸인 자동 트리거 + Hyphen 소득/보험 API 연동)
 
+#### 결정
+- 작업 1 완료: 자동 알림 발신 경로 정상 확인
+  - bibi-gateway /notify 엔드포인트 정상 작동. 대표님 텔레그램 도달 확인
+  - /notify 파라미터 키: 'text' (지시서는 'message'로 작성됐으나 클코가 현장 교정)
+  - 발신 경로 문제 없음 → 앞으로 모든 자동 알림 대표님 폰에 정상 도달
+
+- 작업 2 완료: case_manager 소급 accident 생성 로직
+  - detect_and_transition에 "accident 없음 + 영상판독지/CD 발신" 조건 추가 → 자동 accident 생성 + 즉시 서류요청 전환
+  - trigger_type='auto_keyword_retroactive' (일반 전환과 DB에서 구분)
+  - pipeline.py _handle_case_result에 accident_created_and_transitioned 알림 처리 추가
+  - 검증: 시나리오 A(소급 생성) + C(기존 회귀) 전부 PASS
+  - 의미: 대표님 행동 변화 0. 평소처럼 "영상판독지 보내주세요" 카톡만 치면 accident+체크리스트+전환+알림 전부 자동
+
+#### 인사이트
+- 별도 "상담중 생성 트리거"를 안 만들고 기존 서류요청 전환 로직에 조건 추가만으로 해결. 비비 철학: 상담중은 통과 단계
+- /notify 파라미터 키 'text' 표기 확정 — 앞으로 지시서 작성 시 'message' 아닌 'text' 사용
+
+#### 현황
+- Phase 1-C1 실전 작동 준비 완료 (cs_generator + 자동 전환 + 소급 생성 + 발신 경로 정상)
+- 아직 남은 막힘: 수신 경로 (대표님이 텔레그램에 쳐도 bibi-gateway 도달 못함, Hermes 폴링이 가로챔)
+- 다음: 작업 3 (Hermes 라우터 Phase 1 — 키워드 기반 LLM 우회)
+
 ### 2026-04-15
 
 #### 결정
@@ -1064,6 +1086,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1072,6 +1096,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
