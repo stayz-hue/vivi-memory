@@ -613,6 +613,24 @@ Honcho API / deriver / Graphiti / Neo4j / Qdrant(98K vectors) / pgvector
 - Elite_Fighting_GAS_v2_for_vivi.gs (배포됨)
 - c1_2_design_draft.md
 
+#### 진행
+- C1-2 시작 (3단계 분할)
+  - C1-2-1: 테이블 + 웹훅 + AES 암호화 (현재 지시서 작성)
+  - C1-2-2: cs_generator 확장 + 자동 재생성 (다음)
+  - C1-2-3: 텔레그램 수동 트리거 + 버전 관리 (마지막)
+
+#### C1-2-1 구현 범위
+- PostgreSQL 테이블 3개 신설: customer_insurance / customer_income / customer_sensitive
+- AES-256-GCM 헬퍼 모듈 (/root/vivi-layer1/crypto_helper.py)
+- VIVI_AES_KEY systemd Environment 주입 (bibi-gateway + vivi-layer1)
+- bibi-gateway 엔드포인트 2개: /webhook/elite_insurance, /webhook/elite_income
+- 저장 후 텔레그램 알림
+
+#### 주의 (설계 결정)
+- 주민번호는 이번 payload에 없음 → GAS v2가 resNo를 Hyphen 호출용으로만 쓰고 비비로 전달 안 함
+- customer_sensitive 테이블은 만들되 당장은 사용 안 함. C1-2-2 or 별도 작업에서 GAS v3 편집해 포함
+- cache_key 기반 중복 방지 (같은 조회 재실행 시 덮어쓰기)
+
 ### 2026-04-15
 
 #### 결정
@@ -1459,6 +1477,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1467,6 +1487,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
