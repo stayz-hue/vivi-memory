@@ -631,6 +631,26 @@ Honcho API / deriver / Graphiti / Neo4j / Qdrant(98K vectors) / pgvector
 - customer_sensitive 테이블은 만들되 당장은 사용 안 함. C1-2-2 or 별도 작업에서 GAS v3 편집해 포함
 - cache_key 기반 중복 방지 (같은 조회 재실행 시 덮어쓰기)
 
+#### 외부 도구 검토: OpenCrab (AlexAI-MCP)
+- 정체: MCP 서버 형태의 MetaOntology OS. Neo4j(그래프) + ChromaDB(벡터) + MongoDB(문서) + PostgreSQL(정책/ReBAC) 4-store 통합
+- space 구조: Subject / Resource / Concept / Outcome / Evidence / Policy
+- 핵심 기능: query_ontology(하이브리드 검색), manage_entity, impact_analysis
+
+#### 비비 도입 결정: ❌ 도입 안 함
+- 기능 중복: 비비는 이미 Neo4j + Qdrant + Graphiti + Honcho + MinIO + PostgreSQL로 더 세분화 돼있음. OpenCrab의 ChromaDB 단일 벡터 역할을 비비는 3개(Qdrant/Graphiti/Honcho)로 분리
+- 방향 역행: OpenCrab=범용 OS, 비비=손해사정 도메인 특화. 범용 OS 얹으면 참조본 v2 특화 설계(고객→사고→청구, 6단계, 12유형)가 OpenCrab space 스키마에 왜곡될 위험
+- 삽질 방지 헌법 1조(기존 도구에 있으면 만들지 않는다) + 16조(외부 오픈소스 구조 검증 없이 이식 금지) 위반
+
+#### 참고 각도 1개 — 나중에 Phase 3 이후 검토
+- "impact_analysis" 발상 = 역방향 질의 구조
+- 예: "이 담당자 바뀌면 진행중 어느 케이스에 영향?", "장해 11급 나오면 어느 보험사에서 재청구 가능?"
+- Neo4j에 이미 있는 관계 그래프 활용도를 더 뽑는 방식
+- 현재 우선순위 아님 — C1-2 완료 → Phase 2A/2B → Phase 3 판례 끝난 뒤 재검토
+
+#### 원칙 재확인
+- 외부 온톨로지 도구 유혹에 흔들리지 않음. 비비 참조본 v2 자체가 이미 손해사정 도메인 온톨로지
+- "모으는 건 범용, 쓰는 건 특화" — 비비는 쓰는 쪽
+
 ### 2026-04-15
 
 #### 결정
@@ -1481,6 +1501,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1489,6 +1511,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
