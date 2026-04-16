@@ -362,6 +362,23 @@
 #### 기타 짧은 이슈
 - 텔레그램 "금윤미 상태" → "금윤미 티에이 담당자"가 먼저 매칭됨 (정확 일치 우선순위 없음). query_customer_status 정렬 개선 필요 (낮은 우선순위)
 
+#### 이슈
+- PC카톡 발신 감지 경로가 case_manager 소급 생성 트리거와 연결 안 됨
+  - 증상: 대표님이 PC카톡에서 "영상판독지, 영상CD 부탁드려요" 발신
+  - 텔레그램에 "📤 PC카톡 발신 👤 챗봇폰" 알림 정상 수신 (bibi-gateway까지는 OK)
+  - 근데 작업 2에서 구현한 소급 accident 생성이 발동 안 함
+  - → PC카톡 감지 이벤트가 pipeline.py → case_manager.detect_and_transition 경로로 안 흘러갔음
+  - 가능성: (A) layer1_messages의 direction 값이 "outgoing"이 아닌 별도 값(예: "pc_outgoing") (B) PC카톡 경로가 pipeline.py 자체를 안 거침 (C) DB 저장 자체가 안 됨
+  - 진단 지시 클코에 던짐
+
+#### 해결됨
+- hermes venv에 sentence-transformers 설치 완료 → 판례 검색 정상 작동 확인 (유사도 0.69)
+
+#### 인사이트
+- kakaotalk_monitor.py(Windows PC 관리자 터미널)를 재실행해서 PC카톡 발신 감지는 복구
+- 0층 감지 경로가 여러 개인데 (ViviApp 모바일 카톡, PC kakaotalk_monitor, 문자 등) 각 경로가 1층(pipeline.py + case_manager)에 동일한 인터페이스로 연결돼 있는지 일관성 재검증 필요
+- 이 작업에서 Phase 1-B 연결 시 ViviApp 카톡 기준으로만 테스트했을 가능성 → PC카톡/문자 경로도 직접 검증 필요
+
 ### 2026-04-15
 
 #### 결정
@@ -1192,6 +1209,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1200,6 +1219,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
