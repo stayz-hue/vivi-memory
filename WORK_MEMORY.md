@@ -9,6 +9,16 @@
 ### 2026-04-16
 
 #### 결정
+- C1-2-1 완료: Elite Fighting 웹훅 수신 + 신규 테이블 + AES 암호화
+- AES-256 키 systemd Environment 주입 (bibi-gateway/vivi-layer1 양쪽, VIVI_AES_KEY)
+- /root/vivi-layer1/crypto_helper.py 생성 (encrypt_jumin/decrypt_jumin + encrypt_bytes/decrypt_bytes)
+- 테이블 3개: customer_insurance / customer_income / customer_sensitive
+- bibi-gateway 엔드포인트 2개: /webhook/elite_insurance, /webhook/elite_income
+- 저장 후 텔레그램 알림 (💾 비비 DB 저장 완료)
+- Mock 검증: insurance 2건, income 3건 DB 정상 저장 확인
+- 비고: f-string 내 실제 개행문자 SyntaxError → \n 이스케이프로 수정, stdin 파이프 방식으로 파일 전송
+
+#### 결정
 - 작업 B 완료: honcho-deriver unhealthy 원인 파악 + 복구
 원인: 시나리오 C — deriver는 HTTP 서버 없는 백그라운드 워커인데 이미지 내장 healthcheck가 http://localhost:8000/health를 체크해서 항상 Connection refused로 실패 (2일간 unhealthy). 실제 동작(sync_vectors 5분마다)은 정상이었음.
 대응: docker run --health-cmd 으로 ls /proc/1/exe 기반 프로세스 헬스체크로 교체. docker-compose.yml도 동일하게 업데이트.
