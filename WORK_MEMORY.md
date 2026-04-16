@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- 작업3 완료: Hermes 라우터 Phase 1 (키워드 기반 LLM 우회). bibi-gateway /internal/command Flask 엔드포인트 추가(handle_telegram_command 재사용). gateway/run.py에 _BIBI_CMD_PATTERNS 5종(현황/상태/상담/판례/CS파일) + _match_bibi_command + _forward_to_bibi 추가. _handle_message PRIORITY 앞에 prefilter 삽입. 패턴 단위테스트 9/9 PASS. 전서비스 active. 판례 65312건 인덱싱 무간섭.
+
+#### 결정
 - 작업1+2 완료. 작업1: /notify 엔드포인트는 text키(message 아님) 사용, 200 정상 처리 확인. 발신 경로 정상. 작업2: case_manager detect_and_transition에 소급 생성 로직 추가 — accident 없음+영상판독지 발신 감지 시 자동 accident 생성+즉시 서류요청 전환. pipeline _handle_case_result에 accident_created_and_transitioned action 알림 추가. 시나리오A(소급),C(회귀) 모두 PASS. trigger_type=auto_keyword_retroactive로 일반전환과 구분.
 
 #### 결정
