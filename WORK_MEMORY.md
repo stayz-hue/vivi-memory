@@ -33,6 +33,18 @@
 - 신규 사용자 첫날부터 가치 제공(엔진 B) + 3개월 후 "나만의 비비"(엔진 A) = 온보딩+리텐션 동시 해결
 - 비비 철학 "모으는 건 범용, 쓰는 건 특화" 완성형: 데이터 수집은 범용(전 사용자), 서비스는 특화(이 사용자의 이 건)
 
+#### 결정
+- Phase 1-A 완료: 케이스 DB 2층 구조 구현
+  - accidents + claims + status_history 테이블 생성 (627MB DB dump 백업)
+  - deadlines + pending_actions 테이블 미리 생성 (Phase 2용)
+  - cases → cases_legacy 리네임
+  - case_manager.py 전면 재작성 (psycopg v3 스타일, CRUD + 서류체크리스트 + 자동전환감지 + 대시보드)
+  - bibi-gateway 텔레그램 /webhook/telegram 라우트: "OO 상담"→accidents 생성, "OO 상태"→현황 조회, "현황"→대시보드
+  - hermes venv에 psycopg[binary] + psycopg-pool 추가 설치 (bibi-gateway가 hermes venv 사용)
+  - 사고일+180일 트리거 정상 동작 확인
+  - 검증 시나리오 6개 통과, 기존 0층 /webhook/bibi-incoming 무변경 확인
+  - Phase 1-B 진행 예정: pipeline.py 연결 + ucansign + deadline_tracker
+
 ### 2026-04-15
 
 #### 결정
@@ -827,6 +839,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -835,6 +849,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
