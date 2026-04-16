@@ -844,6 +844,72 @@ Embodied OS for Loss Adjustment "BiBi" 대표
 10년차 손해사정인
 ```
 
+#### 결정
+- C1-2-3 완료 → C1-2 시리즈 전체 완성
+
+#### C1-2 3단계 전부 완료
+- C1-2-1: Elite Fighting 웹훅 수신 + DB 테이블 3개 + AES-256-GCM 암호화
+  - customer_insurance / customer_income / customer_sensitive
+  - VIVI_AES_KEY systemd Environment 주입
+  - crypto_helper.py 모듈
+  - /webhook/elite_insurance, /webhook/elite_income 엔드포인트
+  - 실데이터 검증: CON-0322 배승휴 보험 15건 저장 (정상 9건, 한글 완벽)
+- C1-2-2: cs_generator 보험/소득 셀 자동채움 + 웹훅 자동 재생성
+  - fetch_active_insurance / fetch_latest_income 신규
+  - fill_worksheet 확장 (B66/B67/A89~E98)
+  - 정상/유효만 최대 10건, verified_at DESC → coverage_amt DESC 정렬
+  - 월소득 = 최신 proof totaSnwAmt ÷ 12
+  - 직업 = salary.pperNm > business.industry > business.payer_name 순
+  - 계약일 YYYYMMDD → YYYY.MM.DD 변환
+  - _elite_regenerate_cs_if_active 공통 헬퍼
+  - 활성 accident 없으면 silent skip
+- C1-2-3: 텔레그램 수동 트리거 + CS파일 버전 관리
+  - accidents.cs_version_count 컬럼
+  - 파일명 _v{N} 접미사, MinIO 이전 버전 보존
+  - Hermes 라우터 2종 신규: insurance_query, income_query (총 7종 패턴)
+  - "OO 보험조회", "OO 소득조회" 명령 → 요약 + CS파일 자동 갱신
+  - 검증 14종 PASS, 기존 5종 회귀 없음, LLM 폴백 정상
+
+#### 전체 가동 흐름 (완성)
+Elite Fighting 웹앱에서 보험 조회
+  → Hyphen API 호출 (GAS)
+  → 결과 저장 (GAS 기존 흐름 유지)
+  → 대표님 텔레그램 알림 (GAS, 기존)
+  → isOwner 분기: 비비 웹훅 호출 (v2 신규)
+  → bibi-gateway /webhook/elite_insurance
+  → contact 매칭 (없으면 auto-create)
+  → customer_insurance DB 저장
+  → "💾 비비 DB 저장 완료" 알림 (비비, 신규)
+  → 활성 accident 있으면 cs_generator 재호출
+  → CS파일 v{N+1} 생성 (보험/소득 자동채움 포함)
+  → MinIO 업로드 (이전 버전 보존)
+  → "🔄 보험조회 후 CS파일 갱신됨 [v2]" 알림 (비비, 신규)
+
+대표님이 텔레그램에서 "OO 보험조회" 입력
+  → Hermes 라우터 키워드 매칭
+  → bibi-gateway /internal/command
+  → _fetch_insurance_summary (DB 재사용, Hyphen 재호출 없음)
+  → 활성 accident 있으면 CS파일 버전 증가해서 재생성
+  → 현황 요약 + 새 CS파일 다운로드 링크 반환
+
+#### 인사이트
+- Hermes 라우터 7종 패턴 + LLM 폴백 구조 완성 — 결정론 앞, LLM 뒤
+- 수동/자동 트리거가 동일한 cs_generator 호출 → 출력 일관성
+- GAS v2 isOwner 분기로 직원 업무 무영향 (비비는 대표님 건만)
+- Elite Fighting은 God's Eyes 시트 저장 + 비비 웹훅 둘 다 호출 (safety net 2~3주 유지 후 시트 제거 예정)
+- AES 키 systemd Environment 주입 패턴 재사용 가능
+
+#### 현황
+- Phase 1 자동화 + C1-1 (CS파일) + C1-2 (보험/소득 통합) 가동 중
+- 기억 인프라 전체 healthy
+- 판례 98K + 크론 증분 수집 중
+
+#### 다음 후보
+- C1-3: 진단서 OCR → 상병명/진단명 분류 (후유장해/진단금/사망)
+- 판례 content 청킹 (검색 정확도 향상, 유사도 0.69 → 0.8+)
+- 작업 4: 이름→컨텍스트 버튼 UX (실전 2~3일 후)
+- insurance_screening 개선 (UX + 비비 연동 + AI 사전검토) — 나중에
+
 ### 2026-04-15
 
 #### 결정
@@ -1710,6 +1776,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1718,6 +1786,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
