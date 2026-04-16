@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- C1-2-3 완료: 텔레그램 수동 트리거 2종 + CS파일 버전 관리. accidents.cs_version_count 컬럼 추가. build_filename _v{N} 접미사(2604-TA-배승휴-미정-배승휴_v2.xlsx). generate_cs_file 버전 증가 로직. _BIBI_CMD_PATTERNS에 insurance_query/income_query 2종 추가(총 7종). handle_telegram_command에 보험조회/소득조회 분기. _fetch_insurance_summary/_fetch_income_summary/_get_active_accident_id 헬퍼 추가. 검증: 패턴14종 전부PASS, v1→v2 버전증가 DB확인, 기존5종 회귀없음, 폴백정상.
+
+#### 결정
 - C1-2-2 cs_generator 확장 완료. fetch_active_insurance()/fetch_latest_income() 추가, fill_worksheet() B66(직업)/B67(월소득)/A89~E98(보험10행) 자동채움, generate_cs_file() 통합, format_cs_result_telegram() 자동채움 요약 강화. server.py에 _elite_regenerate_cs_if_active() 추가 - 보험/소득 웹훅 저장 후 활성사건 있으면 CS파일 자동재생성. 검증: CON-0322 fetch_active_insurance 9건 정상, 사건없음→cs_regen_skip 정상, webhook 200 OK.
 
 #### 결정
