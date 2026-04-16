@@ -500,6 +500,64 @@ PC카톡/폰카톡 발신
 - 벌크 로드 완료 후: 판례 content 청킹 (별도 작업)
 - C1-3, 작업 4는 그 이후
 
+#### 오늘 완료 (총 9건)
+1. Phase 1-C1 — CS파일 엑셀 자동 생성 (원본 템플릿 + 암호화 + MinIO + 파일명 규칙)
+2. MinIO URL 외부 접근 수정 (_MINIO_ENDPOINT localhost → 84.247.153.89)
+3. 작업 1 — 자동 알림 발신 경로 확정 (/notify 파라미터 키 'text' 확인)
+4. 작업 2 — case_manager 소급 accident 생성 (accident 없음 + 영상판독지 발신 → 자동 생성 + 즉시 서류요청)
+5. 작업 3 — Hermes 라우터 Phase 1 (키워드 LLM 우회, 5종 패턴, 9/9 PASS)
+6. 작업 5 — contact_id NULL 근본 해결 (pipeline.py auto-create via contact_resolver /resolve)
+7. 작업 B — honcho-deriver unhealthy 복구 (헬스체크 ls /proc/1/exe 교체)
+8. 테스트 데이터 전체 정리 (PG + Honcho + Graphiti + MinIO)
+9. Elite Fighting GAS v2 제작 + 대표님 배포 완료 (비비 웹훅 전송, 기존 흐름 무변경)
+
+#### end-to-end 완주 증명
+"📤 PC카톡 발신 (챗봇폰) 영상판독지..." → 8초 후 "🆕 챗봇폰님 신규 사고 자동 감지 ACC-20260416-002 서류요청"
+→ "챗봇폰 상태" 입력 → "👤 챗봇폰님 현황 ACC-20260416-002 (서류요청) 서류: 2종 중 0종"
+= 14단계 체인 LLM 호출 0회로 자동 작동
+
+#### 기억 인프라 전체 healthy
+Honcho API / deriver / Graphiti / Neo4j / Qdrant / pgvector 전부 정상
+
+#### 판례 벌크 로드
+최종 97,043건 대상, 오후 완료. 크론잡으로 계속 증분 수집 중
+
+#### 인사이트 (중요)
+- 비비 UX 3층 위계 확립: 1층 자동추론(메인) → 2층 애매시 버튼 질문 → 3층 수동명령(이름만)
+- 설계 1순위 원칙: 결정론적 코드 앞, LLM 자연어 폴백 (대표님 원칙)
+- Elite Fighting GAS가 이미 Hyphen API + 홈택스 소득조회 연결돼 있었음. VPS 신규 구현 불필요, 웹훅 연동만
+- GAS v2 isOwner 분기로 직원 요청은 비비로 안 감 → 직원 업무 무영향
+
+#### C1-2 준비 완료 (내일 본격 구현)
+- GAS v2 배포됨. 404 응답이지만 GAS→VPS 네트워크 도달 검증됨 (10:41:04, Google IP 35.187.134.96)
+- elite_insurance 웹훅 수신 확인 (insurance 조회 테스트)
+- elite_income 미테스트 (소득 조회 실행 안 함)
+- 내일 작업 범위:
+  1. bibi-gateway에 /webhook/elite_insurance + /webhook/elite_income 엔드포인트 2개 구현
+  2. 신규 테이블 3개: customer_insurance, customer_income, customer_sensitive (AES 암호화)
+  3. 웹훅 수신 시 contacts 매칭 + 활성 accident 있으면 cs_generator 재호출 → CS파일 새 버전
+  4. cs_generator fill_worksheet에 보험/소득 데이터 인자 추가 (B66/B67/B89~E98)
+  5. 텔레그램 알림 통합
+
+#### 미해결 / 차기 과제
+- 작업 4 (이름→컨텍스트 버튼 UX) — 실전 2~3일 후
+- C1-3 (진단서 OCR → 상병명/진단명 분류)
+- 판례 content 청킹 (벌크 완료 후)
+- docker-compose 1.29.2 호환성 버그 (우선순위 낮음)
+- query_customer_status 정렬 개선 (정확 일치 우선)
+- Google Drive → MinIO 완전 이전 (Elite Fighting 유산 정리, 2~3주 후)
+- API 월 상한 설정 ($10 limit, $5 alert) — 대표님 할일 유지
+
+#### 파일 산출물 위치 (다음 세션 참고)
+- /mnt/user-data/outputs/claude_task_1_2_notify_retroactive.md
+- /mnt/user-data/outputs/claude_task_3_hermes_router.md
+- /mnt/user-data/outputs/claude_task_5_contact_autocreate.md
+- /mnt/user-data/outputs/claude_task_B_honcho_deriver.md
+- /mnt/user-data/outputs/클코_C1_1_CS파일자동생성_v2_원본템플릿.md
+- /mnt/user-data/outputs/클코_MinIO_URL_정석수정.md
+- /mnt/user-data/outputs/Elite_Fighting_GAS_v2_for_vivi.gs (배포 완료)
+- /mnt/user-data/outputs/c1_2_design_draft.md (내일 작업 기초)
+
 ### 2026-04-15
 
 #### 결정
@@ -1342,6 +1400,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1350,6 +1410,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
