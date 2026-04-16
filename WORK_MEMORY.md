@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- P1+P2 통합패치 완료. P1: accidents CHECK 제약에 합의 추가(7종: 상담중→서류요청→수임대기→장해대기→분쟁중→합의→종결). P2: 파일명 _v{N} 제거, 한 사건=한 파일 덮어쓰기(2604-TA-배승휴-미정-배승휴.xlsx). cs_version_count는 갱신횟수 로그로만 유지. 텔레그램 메시지: 생성완료(1회차)/갱신완료(2회차). 검증: 합의상태 INSERT OK, 동일파일명 PASS, _v 없음 PASS.
+
+#### 결정
 - C1-2-3 완료: 텔레그램 수동 트리거 2종 + CS파일 버전 관리. accidents.cs_version_count 컬럼 추가. build_filename _v{N} 접미사(2604-TA-배승휴-미정-배승휴_v2.xlsx). generate_cs_file 버전 증가 로직. _BIBI_CMD_PATTERNS에 insurance_query/income_query 2종 추가(총 7종). handle_telegram_command에 보험조회/소득조회 분기. _fetch_insurance_summary/_fetch_income_summary/_get_active_accident_id 헬퍼 추가. 검증: 패턴14종 전부PASS, v1→v2 버전증가 DB확인, 기존5종 회귀없음, 폴백정상.
 
 #### 결정
