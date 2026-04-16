@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- Phase 1-C1 cs_generator end-to-end 검증 완료. 유민(CON-0148) 테스트: 파일생성 2604-TA-유민-미정-배승휴.xlsx, 암호*9118 적용, MinIO업로드, presigned URL HTTP 200, 기초사항 B8=유민/B17=TA/B16=2026-03-15/B12=상동 정상 채움. 보험사B58=None(claims 없어서 정상). 의뢰서 시트 수식참조 확인. 테스트데이터 정리 완료.
+
+#### 결정
 - MinIO presigned URL 외부 접근 수정 완료. cs_generator.py + doc_pipeline.py MINIO_ENDPOINT를 localhost:9000 → 84.247.153.89:9000으로 변경. minio/.env에 MINIO_SERVER_URL=http://84.247.153.89:9000 추가. presigned URL 외부IP 포함 확인. bibi-gateway 재시작 완료.
 
 #### 결정
