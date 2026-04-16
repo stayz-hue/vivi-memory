@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- 클코 2-A 완료: 판례 Qdrant 증분 로드 구축. precedents 테이블에 qdrant_indexed/qdrant_indexed_at 컬럼 추가. Qdrant collection precedents 생성(768dim, cosine, HNSW m=16). /root/vivi-layer1/precedent_loader.py 생성(ko-sroberta 배치 임베딩+Qdrant upsert+증분 마킹, issues+summary 우선). 크론 등록: 매일 02:00 KST(UTC 00:00) 5000건. 속도: 4.9건/s(모델로드제외). 유사검색 테스트 PASS(query_points API). 백그라운드 벌크로드 시작(PID 1029755, 현재 85,779건 처리중, 약 7.7시간 소요 예상).
+
+#### 결정
 - Phase 1-B 완료: pipeline.py detect_and_transition 연결, ucansign_webhook.py 장해대기 전환 (accidents 2층 구조), deadline_tracker.py 생성 (check-deadlines/docs/idle), cron 3개 등록 (/etc/crontab 09:00/10:00 평일, 10:00 월요일). 검증 4개 PASS.
 
 #### 결정
