@@ -195,6 +195,23 @@
 - C1-2: 유캔싸인 자동 트리거 + Hyphen API 연동 (소득조회/보험계약조회)
 - C1-3: 진단서 OCR → 상병명/진단명 자동 추출 + 후유장해/진단금/사망 분류
 
+#### 이슈 (우선 해결 필요)
+- 텔레그램 메시지가 Hermes Agent로 전달되고 bibi-gateway /webhook/telegram에는 도달 안 함
+  - 증상: "금윤미 CS파일" 텔레그램 전송 시 Hermes가 "CS = Customer Service 담당자?" 식으로 반응
+  - 의미: Phase 1-A에서 등록한 "OO 상담 / OO 상태 / 현황 / 판례 XXX / OO CS파일" 커맨드 전부 미동작 상태
+  - 원인 추정: 
+    1. Hermes가 텔레그램 polling(getUpdates) 실행 중 → 폴링과 웹훅 동시 불가능, 폴링이 우선 채감
+    2. 또는 Hermes가 별도 봇 토큰 사용 중
+  - 영향: 자동 전환 트리거가 "OO 상담" 커맨드로 가동되는 구조라 accidents 테이블 비어있음 (Phase 1-A 이후 실사용 0건)
+  - 해결 방안 후보:
+    A. Hermes에 "CS파일/상담/상태/현황/판례" 키워드 감지 시 bibi-gateway HTTP 호출하는 도구 추가
+    B. 봇 토큰 분리 — Hermes용과 bibi-gateway용 각각 (자연스러운 커맨드 분리)
+    C. bibi-gateway가 Hermes보다 먼저 메시지 받도록 웹훅 방식으로 일원화 + Hermes는 bibi-gateway가 전달하는 방식
+  - 우선순위: C1-2 시작 전에 해결 필요
+
+#### 결정
+- Phase 1-C1 cs_generator 자체 검증 진행: accidents 0건이라 테스트용 accident 임시 INSERT 후 end-to-end 확인 방식으로 진행
+
 ### 2026-04-15
 
 #### 결정
@@ -1009,6 +1026,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -1017,6 +1036,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
