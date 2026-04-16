@@ -67,6 +67,27 @@
 - 통합재설계 기준 클코 1 완료 (서류 자동 생성은 제외됨 — 양식 파일 필요)
 - 다음 후보: 클코 2(판례 Qdrant) / Phase 1-C(서류 자동 생성) / 클코 3(코칭 시스템)
 
+#### 결정
+- 클코 2-A 완료: 판례 Qdrant 증분 로드 인프라 구축
+  - precedents 테이블 실제 컬럼명 확인 완료: issues(판시사항), summary(판결요지), content(판례전문) - 영문
+  - summary 평균 164자, content 평균 2929자 → issues+summary 우선 임베딩 전략 채택
+  - qdrant_client 신버전 API: search → query_points 변경 반영
+  - vivi_env 없음 확인 → 시스템 python 사용 (sentence_transformers 이미 설치됨)
+  - precedents collection 생성 (768dim, Cosine, HNSW m=16)
+  - /root/vivi-layer1/precedent_loader.py 생성 (배치 임베딩 + 증분 마킹)
+  - qdrant_indexed + qdrant_indexed_at 컬럼 추가
+  - 속도: 4.9건/s (목표 대비 양호)
+  - 10건/100건/유사검색 테스트 전부 PASS
+  - 크론 등록: 매일 02:00 KST, 배치 5000건/30분 제한
+  - 벌크 로드 실행 중: PID 1029755, 예상 완료 13:20 KST (약 7.7시간)
+
+#### 현황
+- 판례 수집 병행 중 (~4/20 완료 예정)
+- 수집 완료 후 증분 크론이 나머지 자동 처리
+
+#### 이슈
+- 벌크 설치 exit code 1 뜬 건 해결됨 (pip 성공, __version__ 속성만 없어서 발생 - 실제 동작 OK)
+
 ### 2026-04-15
 
 #### 결정
@@ -867,6 +888,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -875,6 +898,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
