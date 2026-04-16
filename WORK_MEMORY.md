@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- P3 사건매칭 1단계 완료. case_matching_log/document_type_rules 테이블 생성, case_signal_scorer.py 뼈대(enhanced_match: override>embedding>ASK), doc_pipeline.py 복구+P3훅, server.py에 callback_query 핸들러(_handle_case_match_callback) 추가. bibi-gateway 재기동 active. 신호1/2 플레이스홀더(데이터 없음), 실서비스 서류 유입 시 ASK 흐름 자동 활성화 예정. 보고서: /root/claude_work/20260416_p3_1st_summary.md
+
+#### 결정
 - P1+P2 통합패치 완료. P1: accidents CHECK 제약에 합의 추가(7종: 상담중→서류요청→수임대기→장해대기→분쟁중→합의→종결). P2: 파일명 _v{N} 제거, 한 사건=한 파일 덮어쓰기(2604-TA-배승휴-미정-배승휴.xlsx). cs_version_count는 갱신횟수 로그로만 유지. 텔레그램 메시지: 생성완료(1회차)/갱신완료(2회차). 검증: 합의상태 INSERT OK, 동일파일명 PASS, _v 없음 PASS.
 
 #### 결정
