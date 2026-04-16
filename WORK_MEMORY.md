@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- 작업5 완료: contact_id NULL 처리 개선. pipeline.py _ensure_contact_exists를 contact_resolver HTTP /resolve (5111) 방식으로 교체. name-only 요청으로 미등록 발신자 자동 조회/생성. 중복 방지 OK(동일 이름 2번 호출시 동일 CON-XXXX 반환). end-to-end: PC카톡 발신→contact 자동생성→accident 소급생성→서류요청 전환 PASS. get_or_create_by_name 별도 추가 불필요(resolve_contact가 이미 name-only 생성 지원).
+
+#### 결정
 - 문제1 해결: hermes venv에 sentence-transformers 설치(/root/.hermes/hermes-agent/venv/bin/pip3). 판례검색 /internal/command 검증 완료 — 유사판례 5건, 유사도 0.69. 문제2 진단: 0층 발신 감지 전혀 없음(layer1_messages 전부 incoming). ViviApp AccessibilityService 발신 감지 미작동. ADB 원격 확인 불가. 원인: 대표님이 ViviApp 없는 기기(PC/다른폰)에서 카톡 발신했거나 AccessibilityService 꺼진 상태 추정. 대표님께 발신 기기 확인 필요.
 
 #### 결정
