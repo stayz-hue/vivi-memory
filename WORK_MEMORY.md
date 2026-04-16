@@ -9,6 +9,13 @@
 ### 2026-04-16
 
 #### 결정
+- 작업 B 완료: honcho-deriver unhealthy 원인 파악 + 복구
+원인: 시나리오 C — deriver는 HTTP 서버 없는 백그라운드 워커인데 이미지 내장 healthcheck가 http://localhost:8000/health를 체크해서 항상 Connection refused로 실패 (2일간 unhealthy). 실제 동작(sync_vectors 5분마다)은 정상이었음.
+대응: docker run --health-cmd 으로 ls /proc/1/exe 기반 프로세스 헬스체크로 교체. docker-compose.yml도 동일하게 업데이트.
+복구 후 healthy 상태 확인 (Up 4분, healthy).
+비고: docker-compose 1.29.2 + 신규 Docker 이미지 ContainerConfig 버그로 docker-compose up 실패 → docker run으로 직접 재생성.
+
+#### 결정
 - 작업5 완료: contact_id NULL 처리 개선. pipeline.py _ensure_contact_exists를 contact_resolver HTTP /resolve (5111) 방식으로 교체. name-only 요청으로 미등록 발신자 자동 조회/생성. 중복 방지 OK(동일 이름 2번 호출시 동일 CON-XXXX 반환). end-to-end: PC카톡 발신→contact 자동생성→accident 소급생성→서류요청 전환 PASS. get_or_create_by_name 별도 추가 불필요(resolve_contact가 이미 name-only 생성 지원).
 
 #### 결정
