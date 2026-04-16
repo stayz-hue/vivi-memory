@@ -9,6 +9,9 @@
 ### 2026-04-16
 
 #### 결정
+- Phase 1-B 완료: pipeline.py detect_and_transition 연결, ucansign_webhook.py 장해대기 전환 (accidents 2층 구조), deadline_tracker.py 생성 (check-deadlines/docs/idle), cron 3개 등록 (/etc/crontab 09:00/10:00 평일, 10:00 월요일). 검증 4개 PASS.
+
+#### 결정
 - Phase 1-A 완료: 케이스 DB 2층 구조 구현. accidents+claims+status_history+deadlines+pending_actions 테이블 생성. cases→cases_legacy 리네임. case_manager.py 전면 재작성(CRUD+서류체크리스트+자동전환감지+대시보드, psycopg v3 스타일). bibi-gateway 텔레그램 커맨드 추가: OO상담→accidents 생성, OO상태→현황조회, 현황→대시보드. /webhook/telegram 라우트 신규 추가. hermes venv에 psycopg[binary]+psycopg-pool 추가 설치. 검증 6개 시나리오 통과. Phase 1-B 대기: pipeline.py 연결(자동전환 실시간감지)+ucansign 연결+deadline_tracker.py
 
 #### 인사이트
