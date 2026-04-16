@@ -115,6 +115,31 @@
 - 클코 2-A 완료, 벌크 로드 진행 중 (저녁 완료 예정)
 - 다음: 클코 2-B(검색 API + 1층 파이프라인 연결) 준비 or WORK_MEMORY 동기화 이슈 해결
 
+#### 결정
+- 클코 2-B 완료: 판례 검색 API + 1층 파이프라인 연결
+  - /root/vivi-layer1/precedent_search.py 생성 (search_precedents + search_for_document + format_results_telegram)
+  - doc_pipeline.py에 유사 판례 자동 검색 연결 (OCR 완료 후 accident_type 기반 필터 + top 3)
+  - bibi-gateway server.py에 자연어 판례 검색 커맨드 추가: "판례 XXX" / "XXX 판례" → top 5
+  - 환경변수 VIVI_AUTO_PRECEDENT로 자동 검색 ON/OFF 가능 (기본 ON)
+  - hermes venv에 qdrant_client 설치 (bibi-gateway에서 precedent_search 호출용)
+  - 유사도 검증: 0.63~0.64 (벌크 로드 4,600건 시점, 전체 완료 후 재측정 예정)
+  - 실패 시 기존 OCR/알림 흐름 영향 없음 (예외 격리)
+
+- Phase 1 (Cases 재설계) + 클코 2 (판례) 완료. 벌크 로드 약 4시간 후 완료
+
+#### 인사이트
+- vivi-layer1은 시스템 python, bibi-gateway는 hermes venv. 공통 라이브러리(psycopg, qdrant_client 등)는 양쪽 venv에 각각 설치 필요 — 앞으로 지시서에 venv 구분 명시할 것
+- WORK_MEMORY 동기화 파이프라인은 완전 정상. 이슈는 Anthropic web_fetch 자체 캐시였음. 앞으로 대화 시작 시 bash_tool+curl로 GitHub blob 읽는 방식이 캐시 우회에 유효 (프로젝트 지시서 첫 줄 수정 권장)
+
+#### 현황
+- 벌크 로드 진행 중: 7,680 / 86,966건 (약 4시간 후 완료)
+- 완료 후 자동 크론(매일 02:00)이 새로 수집되는 판례 계속 반영
+
+#### 다음 후보
+- Phase 1-C: 서류 자동 생성 (CS파일, 의뢰서, 손해사정서) — 양식 파일 필요
+- 클코 3: 코칭 시스템 (영업/분쟁/협상)
+- 판례 content 전문 청킹 (벌크 완료 후 하는 게 합리적)
+
 ### 2026-04-15
 
 #### 결정
@@ -921,6 +946,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -929,6 +956,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
