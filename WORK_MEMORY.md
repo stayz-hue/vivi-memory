@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-18
 
+#### 현황
+- 444vs237 격차 원인 완전 확정. vivi-layer1/pipeline.py가 layer1_messages는 항상 저장(contact_id 무관), Honcho는 contact_id 확보 성공 시에만 honcho_client.py로 저장. 격차 207건=contact_id 없는 메시지(챗봇폰·미등록번호). 파이프라인: 웹훅→pipeline.py→(1)layer1_messages 항상+(2)contact_id 있을 때 HonchoClient.record_conversation()→messages+(3)GraphitiClient→Neo4j. Honcho 임베딩은 deriver/consumer.py가 큐 비동기 처리(sync_vectors→OpenAI). .env에 임베딩 모델 설정 없음=Honcho 기본값 사용.
+
 #### 결정
 - Uptime Kuma 웹훅 URL 수정: /webhook → /notify. notification id=2 비비웹훅의 webhookURL이 http://localhost:5114/webhook으로 설정되어 있었으나 bibi-gateway에 /webhook 라우트 없음. 올바른 경로 /notify로 DB 직접 수정 후 uptime-kuma 컨테이너 재시작. 매시간 정시마다 발생하던 404 에러 해소 예정.
 
