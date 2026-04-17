@@ -859,6 +859,42 @@ Stage 7: 영장 방어 포기, 건강한 시민 도구 → 최종
 - 디스크 여유 159GB (18% 사용)
 - n8n Exited 5일 전 (의도된 중지, 정상)
 
+#### 결정 (세션 A 완료, 2026-04-17)
+백업 3단계 전부 구축 완료. OS 재배치(세션 B/C) 안전장치 확보.
+
+**스케줄:**
+- 매일 03:00: PostgreSQL pg_dump (로컬 /var/backups/vividb, 14일 보관, 317MB 압축)
+- 매일 03:30: rclone → Google Drive (원격 30일)
+- 일요일 04:00: MinIO + Neo4j + Qdrant tar.gz + rclone (로컬 30일 / 원격 60일)
+
+**첫 백업 크기:**
+- MinIO 58MB (281 파일)
+- Neo4j 3.3MB (194 파일)
+- Qdrant 332MB (131 파일)
+- PostgreSQL dump 317MB
+
+**컨테이너 중지 시간 (주간 백업):**
+- Neo4j 15초, Qdrant 40초 — 운영 영향 무시 수준
+
+**Google Drive 여유:** 14.46GB / 15GB (첫 업로드 후)
+
+#### 인사이트
+- MinIO는 Docker가 아니라 systemd 서비스 (/usr/local/bin/minio, /data/minio) — 참고본 다수가 Docker 가정이었음. 메모리 #12에 "인프라서비스 Step0 systemctl/docker ps 확인 필수" 원칙 추가
+- Graphiti는 자체 데이터 볼륨 없음 — Neo4j 백엔드 의존, 별도 백업 불필요
+- Honcho는 config.toml만 외부 마운트 — 실제 데이터 위치 Step 3 당시 확인 안 됨 (세션 B에서 확인 권장)
+- Gmail MCP 세션 새로고침 필요 이슈 재발 (API 시그니처 변경: to/cc/bcc가 array, 도구명 Gmail:create_draft)
+- Google Drive 인증 시 SSH 포트포워딩 -L 53682 옵션 불필요 (오히려 PC rclone authorize 실패 원인). OAuth 분리 방식(rclone authorize on PC → paste token on VPS)이 정답
+
+#### 문서 산출
+- /mnt/user-data/outputs/프로젝트파일_인벤토리_20260417.md (51개 파일 BB-OS 헌법 기준 분류)
+- 세션 B에서 그대로 참조 가능
+- 주요 결과: 빈파일 7개 삭제 / 대체됨 5개 (80K+ 토큰) 제거 후보 / Core 6개 + 손사 6개 + Law 2개 + 서류대리 2개 분리
+
+#### 다음 (세션 B 진입 시)
+- 세션 B 사전 감사 클코 결과(/root/backups/20260417_sessionB_audit/audit_report.md) 참조
+- 인벤토리 md 참조
+- BB-OS 헌법 v1 기준으로 재배치 계획서 작성
+
 ### 2026-04-16
 
 #### 결정
@@ -3440,6 +3476,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -3448,6 +3486,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
