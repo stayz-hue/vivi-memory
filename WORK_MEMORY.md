@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-17
 
+#### 현황
+- rclone 설치 완료(v1.73.4) + 기억 인프라 감사. Docker: vivi-qdrant/neo4j/graphiti/honcho-api/honcho-deriver 전부 Up. MinIO는 Docker 아닌 systemd 서비스로 실행 중(/data/minio, 62M). 데이터 볼륨: Qdrant 404M(/root/vivi-memory/qdrant), Neo4j 520M(/root/vivi-memory/neo4j), Graphiti 37M(/root/vivi-memory/graphiti, 볼륨 마운트 없음-소스코드), Honcho 39M(config.toml만 마운트). n8n Exited. /root/gdrive_test.sh 생성 완료(OAuth 후 실행용). 디스크: 193G 중 35G 사용(18%), 여유 159G
+
 #### 결정
 - PostgreSQL vividb 자동 백업 구축 완료(세션A Step1). 스크립트: /usr/local/bin/vividb_backup.sh, 크론: /etc/cron.d/vividb_backup (매일 03:00), 저장: /var/backups/vividb/, 14일 보관. 수동 테스트: 729MB → 317MB dump 정상 생성(약 1분 43초 소요). backup.log 확인됨.
 
