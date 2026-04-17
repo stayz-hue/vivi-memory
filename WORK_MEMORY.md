@@ -9,6 +9,9 @@
 ### 2026-04-18
 
 #### 현황
+- 파이프라인 구조 최종 재확정. layer1 honcho_client가 저장한 contact_id(CON-0315~0320 등)와 messages의 peer_name(CON-0303, CON-0050 등)이 완전히 겹치지 않음. messages 237건의 실제 공급원은 Hermes gateway(gateway/platforms/webhook)가 카카오 웹훅을 독립 수신하여 저장한 것. layer1의 honcho_client는 16건만 저장(사실상 dead path). 카카오 웹훅이 layer1과 Hermes gateway 두 곳으로 병렬 전달되는 이중 수신 구조. message_embeddings synced 237건/pending 0건으로 임베딩 완전 정상.
+
+#### 현황
 - 444vs237 격차 원인 완전 확정. vivi-layer1/pipeline.py가 layer1_messages는 항상 저장(contact_id 무관), Honcho는 contact_id 확보 성공 시에만 honcho_client.py로 저장. 격차 207건=contact_id 없는 메시지(챗봇폰·미등록번호). 파이프라인: 웹훅→pipeline.py→(1)layer1_messages 항상+(2)contact_id 있을 때 HonchoClient.record_conversation()→messages+(3)GraphitiClient→Neo4j. Honcho 임베딩은 deriver/consumer.py가 큐 비동기 처리(sync_vectors→OpenAI). .env에 임베딩 모델 설정 없음=Honcho 기본값 사용.
 
 #### 결정
