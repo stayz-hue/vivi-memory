@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-18
 
+#### 결정
+- Uptime Kuma 웹훅 URL 수정: /webhook → /notify. notification id=2 비비웹훅의 webhookURL이 http://localhost:5114/webhook으로 설정되어 있었으나 bibi-gateway에 /webhook 라우트 없음. 올바른 경로 /notify로 DB 직접 수정 후 uptime-kuma 컨테이너 재시작. 매시간 정시마다 발생하던 404 에러 해소 예정.
+
 #### 현황
 - messages/layer1 파이프라인 구조 확정. 웹훅 수신 시 layer1/pipeline.py가 layer1_messages에 먼저 저장(BGE768), 약 200ms 후 Hermes gateway/run.py가 Honcho API(:8100) 호출하여 messages에 저장(OpenAI1536→Neo4j). 444vs237 격차 원인: layer1=모든 웹훅(incoming+outgoing 전부), messages=Hermes가 처리한 대화만 선택 저장. Honcho 호출 주체: /root/.hermes/hermes-agent/plugins/memory/honcho/client.py. Peer 구조: 41개(CON-XXXX), contact당 1 session. messages 시간분포: 4/16 46건→4/17 188건으로 급증(시스템 본격 가동).
 
