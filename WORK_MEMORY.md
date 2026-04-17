@@ -6,6 +6,11 @@
 ---
 
 ## [최근 3일]
+### 2026-04-18
+
+#### 현황
+- VPS 전체 인프라 진단. 서비스: bibi-gateway/contact-resolver/meeting-recorder/minio/postgresql/ucansign-webhook 모두 running. Docker: graphiti/honcho-api(3d), honcho-deriver(32h), neo4j/qdrant(1h) 모두 healthy. PostgreSQL: layer1_messages 444건, message_embeddings 237건(207건 미임베딩), contacts 376건. 기억인프라: Qdrant precedents 컬렉션만 있음(대화벡터없음), Neo4j 비번=vivi_graph_2026 확인, Graphiti healthy, Honcho /v1/apps 404. MinIO 버킷 비어있음(첨부파일 파이프라인 없음). 이슈: /webhook 404 매시간 반복(올바른 경로는 /webhook/bibi-incoming), meeting-recorder 7일간 실업로드 없음, layer1→Qdrant/Neo4j ETL 크론 없음.
+
 ### 2026-04-17
 
 #### 현황
