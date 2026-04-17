@@ -9,6 +9,9 @@
 ### 2026-04-17
 
 #### 결정
+- 세션A Step2(C) 완료. Google Drive 자동 업로드 크론 구축. 크론: /etc/cron.d/vividb_backup_gdrive (매일 03:30, gdrive:vivi-backups/postgresql). 업로드 테스트: 317MB 정상 업로드(12분). pg_restore --list 무결성 확인 OK. 잔여 Drive 용량: 14.46GB. 업로드 스크립트: /usr/local/bin/vividb_backup_to_gdrive.sh.
+
+#### 결정
 - 세션A Step2(A) 완료. rclone v1.73.4 기존 설치 확인. Google Drive 업로드 스크립트 생성: /usr/local/bin/vividb_backup_to_gdrive.sh (매일 03:30, gdrive:vivi-backups/postgresql, 30일 보관). 인증 안내: /root/GDRIVE_SETUP_README.md. 대표님 SSH 포트포워딩 후 rclone config 직접 진행 필요.
 
 #### 현황
