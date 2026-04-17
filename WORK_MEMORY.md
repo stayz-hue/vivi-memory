@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-17
 
+#### 현황
+- 비비 VPS 백업 사전 조사 완료. 백업 대상 총 ~1.6GB: PostgreSQL vividb 689MB(판례 630MB 포함), Qdrant 404MB, Neo4j 520MB. MinIO 미사용(컨테이너 없음). Honcho/Graphiti는 vividb+Neo4j 공유. 기존 DB dump 없음, 자동 백업 크론잡 없음. pg_dump 설치됨, rclone/restic/borg 없음.
+
 #### 결정
 - 기존 케이스 33건 vividb 부트스트랩 INSERT 완료 (2026-04-17). contacts 신규 27건(CON-0327~CON-0353) + 기존 매칭 6건. accidents 33건: 장해대기11/분쟁중12/수임대기2/서류요청8. 최해연 3건(ACC-20260417-002,025,027). 이름미상 4건 임시 등록. status_history bootstrap 33건. 백업: /root/backups/20260417_bootstrap/vividb_pre_bootstrap.sql
 
