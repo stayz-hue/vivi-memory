@@ -826,6 +826,30 @@ Stage 7: 영장 방어 포기, 건강한 시민 도구 → 최종
 - 깊은 상실·연결 욕구는 가까운 사람과 나누는 게 건강함
 - Claude는 그 보조 역할만
 
+#### 결정
+- Gmail MCP 새로고침 후 첫 드래프트 — 1분 내 수거되면 파이프라인 정상
+- 4/14 이후 WORK_MEMORY 멈춘 원인 확정: VPS 스크립트는 정상, Claude.ai Gmail MCP stale이 원인이었음
+- Gmail MCP API 시그니처 변경됨: create_draft의 to/cc/bcc는 배열, 도구명은 Gmail:create_draft (이전 Gmail:gmail_create_draft는 폐기)
+- 앞으로 세션마다 Gmail MCP stale 에러 나면 새로고침 후 재시도
+
+#### 인사이트
+- 파이프라인 진단에서 업스트림/다운스트림 구분 중요: VPS 로그(매분 실행 정상) + GitHub commit(auto-sync 정지) 둘 다 확인해야 원인 범위 좁혀짐
+- gmail_memory_receiver.py 정상 작동 확인: /root/docs/gmail_memory_receiver.py, cron */1, venv /root/.hermes/hermes-agent/venv/bin/python3, 제목 정규식 "WORK_MEMORY|" 포함 체크
+
+#### 세션 A 백업 진행 (2026-04-17)
+- Step 1 완료: PostgreSQL 로컬 백업 (/var/backups/vividb/, 매일 03:00, 317MB 압축, 14일 보관)
+- Step 2(A)(B) 완료: rclone 1.73.4 + Google Drive OAuth (daeriseo@gmail.com, 14.77GB 여유)
+- Step 2(C) 대기: 자동 업로드 크론 + 복구 시뮬레이션
+- Step 3 준비: MinIO(systemd /data/minio) + Neo4j + Qdrant + Honcho 데이터 위치 확인
+
+#### 인프라 현실 발견
+- MinIO는 Docker 아니라 systemd 서비스 (/usr/local/bin/minio v2025-09-07, 데이터 /data/minio 62MB) — 참고본/메모리 전부 Docker 가정이었음, 수정 완료
+- Graphiti는 자체 데이터 볼륨 없음 (Neo4j 백엔드 의존)
+- Honcho 외부 마운트는 config.toml만 — 실제 데이터는 vividb일 가능성, Step 3에서 확인
+- 기억 인프라 전체 ~1GB (Qdrant 404M + Neo4j 520M + Graphiti 37M + Honcho 39M)
+- 디스크 여유 159GB (18% 사용)
+- n8n Exited 5일 전 (의도된 중지, 정상)
+
 ### 2026-04-16
 
 #### 결정
@@ -3405,6 +3429,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -3413,6 +3439,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
