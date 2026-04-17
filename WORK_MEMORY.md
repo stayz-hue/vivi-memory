@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-17
 
+#### 현황
+- 세션B 사전 감사 완료. /root/backups/20260417_sessionB_audit/audit_report.md (9.2K) 저장. 핵심: systemd 33개 running, Docker 5개 running(vivi-qdrant Exited 주의), vividb 테이블 43개(precedents 167851rows/649MB 최대), MinIO 버킷 4개(62M), 크론잡 15개, Git리포 4개. BB-OS 헌법 기준 Core/도메인 분류 완료
+
 #### 결정
 - 세션A Step3 완료. 기억 인프라 + MinIO 주간 백업 구축. 스크립트: /usr/local/bin/vivi_infra_backup.sh, 크론: /etc/cron.d/vivi_infra_backup (매일 일요일 04:00). 백업: minio 58MB, neo4j 3.3MB, qdrant 332MB → 총 393MB. Drive 업로드 38초. Neo4j/Qdrant 중지 후 재시작 확인. Honcho는 vividb 사용으로 별도 백업 불필요.
 
