@@ -9,6 +9,9 @@
 ### 2026-04-17
 
 #### 결정
+- 세션A Step3 완료. 기억 인프라 + MinIO 주간 백업 구축. 스크립트: /usr/local/bin/vivi_infra_backup.sh, 크론: /etc/cron.d/vivi_infra_backup (매일 일요일 04:00). 백업: minio 58MB, neo4j 3.3MB, qdrant 332MB → 총 393MB. Drive 업로드 38초. Neo4j/Qdrant 중지 후 재시작 확인. Honcho는 vividb 사용으로 별도 백업 불필요.
+
+#### 결정
 - 세션A Step2(C) 완료. Google Drive 자동 업로드 크론 구축. 크론: /etc/cron.d/vividb_backup_gdrive (매일 03:30, gdrive:vivi-backups/postgresql). 업로드 테스트: 317MB 정상 업로드(12분). pg_restore --list 무결성 확인 OK. 잔여 Drive 용량: 14.46GB. 업로드 스크립트: /usr/local/bin/vividb_backup_to_gdrive.sh.
 
 #### 결정
