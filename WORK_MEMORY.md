@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-17
 
+#### 결정
+- 세션A Step2(A) 완료. rclone v1.73.4 기존 설치 확인. Google Drive 업로드 스크립트 생성: /usr/local/bin/vividb_backup_to_gdrive.sh (매일 03:30, gdrive:vivi-backups/postgresql, 30일 보관). 인증 안내: /root/GDRIVE_SETUP_README.md. 대표님 SSH 포트포워딩 후 rclone config 직접 진행 필요.
+
 #### 현황
 - rclone 설치 완료(v1.73.4) + 기억 인프라 감사. Docker: vivi-qdrant/neo4j/graphiti/honcho-api/honcho-deriver 전부 Up. MinIO는 Docker 아닌 systemd 서비스로 실행 중(/data/minio, 62M). 데이터 볼륨: Qdrant 404M(/root/vivi-memory/qdrant), Neo4j 520M(/root/vivi-memory/neo4j), Graphiti 37M(/root/vivi-memory/graphiti, 볼륨 마운트 없음-소스코드), Honcho 39M(config.toml만 마운트). n8n Exited. /root/gdrive_test.sh 생성 완료(OAuth 후 실행용). 디스크: 193G 중 35G 사용(18%), 여유 159G
 
