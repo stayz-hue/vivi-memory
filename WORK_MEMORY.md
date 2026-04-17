@@ -114,6 +114,33 @@
 - 미래 로드맵에 "Bibi 범용 AI 비서"라는 범용 도메인 앱 항목 추가 (우선순위 미정)
 - 이게 "Bibi for 손사"보다 먼저 나올 수도 있음 (범용이 시장 큼) - 추후 결정
 
+#### 인사이트 (중대)
+- **Rewind.ai는 사실상 죽었음**: Meta가 2025년 12월 Limitless 인수하고 Mac 앱 종료. "클라우드+하드웨어 피봇 = 사용자 이탈 = Meta 인수 = 데스크톱 제품 묻힘" 경로
+- Rewind 사례가 시사하는 것: **로컬 저장 포기 = 개인 데이터 OS 제품 사망**. 비비의 VPS 중앙집중 구조는 상용화 시 최대 리스크
+- 한국 시장: AI 캐릭터 챗봇만 있고 "개인 데이터 OS" 카테고리 직접 경쟁자 거의 없음 = 블루오션이자 시장 미형성 위험
+
+#### 결정: 차용 후보 Top 2 확정
+1. **Screenpipe** (MIT, 17.5k GitHub stars) - PC 활동 감지 0층 확장용. 이벤트 기반 캡처 + Accessibility tree + OCR fallback + MCP 서버. 비비 헌법 8.3 "Claude.ai 대화 감지" 기술 솔루션이 이미 존재. 포크 검토 대상
+2. **Supermemory** ($9/월 or MCP 아키텍처 차용) - ChatGPT/Claude/Cursor 대화 자동 캡처. Claude.ai 대화 감지 가장 빠른 길
+
+#### 결정: 대체 시도 X
+- 비비의 기억 프레임워크(Graphiti 71.2% + Qdrant + Honcho)가 Mem0(49%), Cognee보다 낫거나 동급. 재작업 없음
+- OMEGA(95.4% LongMemEval, 로컬 퍼스트)는 추후 참고 자료로만. 지금 갈아타지 않음
+
+#### 참고만 (지금은 도입 안 함)
+- Omi 웨어러블 ($89, 오픈소스 HW+SW) - 한국 판매 안 됨, 대표님 폰+meeting-recorder로 충분
+- Meetily (4.5k stars, Whisper.cpp+Ollama) - 비비 meeting-recorder와 중복
+- Letta (MemGPT) - 설계 철학만 참고, 코드 차용 X. "OS 영감 계층형 메모리"가 비비 헌법과 동일
+
+#### 아침 기각 2번째 정정
+- 아침에 "Core만 판매 = 빈 S3 판매"라고 기각했으나, Supermemory/Screenpipe/Meetily가 실제 상업 성공 중
+- "Core만 판매" 자체는 가능. 단 전부 글로벌+영어 시장. 한국 시장 독립 판매 가능성은 별도 검증 필요
+
+#### 아직 답 없는 질문
+1. Screenpipe 포크 시 ViviApp(Android Kotlin) + Screenpipe(Rust)를 어떻게 연결할지 — 백엔드 API 레벨 통합이 현실적
+2. 상용화 시 "로컬 우선 + 옵션 VPS 동기화" 구조로 재설계할지 여부
+3. 한국 시장에 직접 경쟁자 없는 게 기회인지 시장 없음 신호인지
+
 ### 2026-04-16
 
 #### 결정
@@ -2643,6 +2670,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -2651,6 +2680,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
