@@ -8,6 +8,9 @@
 ## [최근 3일]
 ### 2026-04-17
 
+#### 결정
+- PostgreSQL vividb 자동 백업 구축 완료(세션A Step1). 스크립트: /usr/local/bin/vividb_backup.sh, 크론: /etc/cron.d/vividb_backup (매일 03:00), 저장: /var/backups/vividb/, 14일 보관. 수동 테스트: 729MB → 317MB dump 정상 생성(약 1분 43초 소요). backup.log 확인됨.
+
 #### 현황
 - 비비 VPS 백업 사전 조사 완료. 백업 대상 총 ~1.6GB: PostgreSQL vividb 689MB(판례 630MB 포함), Qdrant 404MB, Neo4j 520MB. MinIO 미사용(컨테이너 없음). Honcho/Graphiti는 vividb+Neo4j 공유. 기존 DB dump 없음, 자동 백업 크론잡 없음. pg_dump 설치됨, rclone/restic/borg 없음.
 
