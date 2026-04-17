@@ -934,6 +934,57 @@ Stage 7: 영장 방어 포기, 건강한 시민 도구 → 최종
 - Claude.ai 프로젝트 메모리는 프로젝트별 격리 → 분리 시 메모리·지침 수동 이전 필요
 - Max x20 구독은 이번 결제주기까지 유지, 이후 Pro로 다운그레이드 예약 중
 
+## 핵심
+BB-OS(비비 뼈대) / BB-sonsa(손사 도메인) 분리 작업을 Claude Code Agent Teams 자동주행으로 개시. 수동 지시서 루프 탈출.
+
+## 셋업 (재현 가능)
+- VPS /root/bb-split/ 디렉토리에 셋업 완료
+- CLAUDE.md (프로젝트 헌법) + SETUP_GUIDE.md
+- .claude/agents/ 4개 서브에이전트: pm / architect / executor / validator
+- docs/설계서.md, master_spec.md (Step 0~8), 인벤토리_20260418.md
+- tmux 세션명: bbsplit
+- 실행 모드: claude --dangerously-skip-permissions (root 불가 → export IS_SANDBOX=1 후 실행)
+- 모델: Opus 4.7 (1M context), Max 20x 구독 안에서 토큰 소모
+- 재접속: ssh root@84.247.153.89 → tmux attach -t bbsplit
+
+## 정체성 확정 (헌법)
+- BB-OS = 모든 사용자 데이터 감지·수집·저장·기억·꺼내주기. 손사/노무/변호 어디에도 붙이기 편한 구조. 판단 안 함. 핵심은 기억 시스템(Honcho/Qdrant/Neo4j/Graphiti/pgvector).
+- BB-sonsa = BB-OS 데이터에 손사 외부자료(판례·약관) 붙이고 판단·분류·응대·서류.
+- 네이밍: "BB for 손사", "BB for 노무" (앞 BB 본체, 뒤 대상).
+
+## 메모리 8번 수정
+Core 1층 = 누구+과거맥락+상황까지. 케이스상태/person_type은 손사 도메인 1층 몫. (혼동 방지 위해 분리 명시)
+
+## 오늘 세션 진단에서 확인된 것 (인벤토리)
+- /root/layer1/ 없음. 실제는 /root/vivi-layer1/ (21개 파일) — PM 판정: memory 클라이언트 2개만 Core, 나머지 19개 sonsa/comprehension/로.
+- 운영 서비스 4개 경로: bibi-gateway/, contact_resolver/, meeting-recorder/, ucansign_webhook.py (루트 단일파일) — 전부 hermes venv 공유
+- vivi_db.py 중복 (루트 + contacts_sync/) → 단일화 필요
+- 루트 산재 fix_*.py, check_*.py 40+ → /root/archive/로 격리
+- DB 운영 상태: layer1_messages 444, messages 237, message_embeddings 237, contacts 376, precedents 167,849, legal_documents 40,565
+- 207건 단톡방 필터링은 "의도적"으로 확정되었지만 "메시지는 절대 버리지 않음" 철학과 충돌 여지 있음 (향후 재검토)
+
+## 인프라 이슈 (분리 작업 끝난 후 처리)
+- MinIO 버킷 비어있음 (카톡 첨부 파이프라인 미연결)
+- meeting-recorder 7일간 ViviApp 실업로드 없음
+- Uptime Kuma /webhook→/notify 수정 완료 (404 해소)
+- Neo4j 비번 vivi_graph_2026 확인됨
+
+## 진행 상황 (세션 종료 시점)
+- Step 0 백업 완료 (7.8G, DB 316M)
+- Step 1 탐색 중 14건 PM 판정, 5대 쟁점 자체 해결 (대표님 호출 0)
+- 대표님 취침, 자동 진행 중
+
+## 작업 스타일 확인
+- 대표님 = 에이전트 오케스트레이터 역할이 적성. SOUL.md 판단 패턴이 AI 설계에 그대로 전이됨.
+- 클코 Agent Teams가 수동 지시서 루프 대체. 2개월 병목의 본질이 "대표님이 코드에 손대야 하는 구조"였음.
+
+## 다음 세션 시작 시 확인
+1. tmux attach -t bbsplit
+2. /root/bb_split_report_*.md 읽기
+3. 서비스 4개 systemctl is-active
+4. Docker 5종 healthy
+5. 실기능: 본인 카톡/텔레그램/통화녹음 1건씩 실측
+
 ### 2026-04-16
 
 #### 결정
@@ -3525,6 +3576,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -3533,6 +3586,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
