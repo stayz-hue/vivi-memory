@@ -9,6 +9,9 @@
 ### 2026-04-18
 
 #### 현황
+- messages/layer1 파이프라인 구조 확정. 웹훅 수신 시 layer1/pipeline.py가 layer1_messages에 먼저 저장(BGE768), 약 200ms 후 Hermes gateway/run.py가 Honcho API(:8100) 호출하여 messages에 저장(OpenAI1536→Neo4j). 444vs237 격차 원인: layer1=모든 웹훅(incoming+outgoing 전부), messages=Hermes가 처리한 대화만 선택 저장. Honcho 호출 주체: /root/.hermes/hermes-agent/plugins/memory/honcho/client.py. Peer 구조: 41개(CON-XXXX), contact당 1 session. messages 시간분포: 4/16 46건→4/17 188건으로 급증(시스템 본격 가동).
+
+#### 현황
 - 0층 스키마 정밀 확인 및 ETL 흔적 추적 완료. 핵심: layer1_messages(444건, BGE 768차원)와 messages/message_embeddings(각 237건, OpenAI 1536차원)는 완전히 분리된 파이프라인으로 FK 연결 없음. 격차 207건은 설계상 차이(layer1=모든 웹훅, Honcho=선택적 저장). ETL 자동화 없음(systemd 타이머/cron 미발견). 스크립트 위치: /root/vivi-layer1/pipeline.py(layer1), /root/vivi-memory/honcho/scripts/generate_message_embeddings.py(Honcho임베딩), reconciler/sync_vectors.py(벡터동기화). Neo4j: Episodic 218, Entity 193, MENTIONS 401, RELATES_TO 134. Honcho API 포트 8100 /v3/workspaces 기반 정상동작.
 
 #### 현황
