@@ -651,6 +651,54 @@ ORCHESTRATOR_SPEC|orch_status_template_patch_v3|... 드래프트 생성됨. Gmai
 ## 상태
 스펙 대기 중. 오케 다음 tick 에서 처리 예정. 결과 메일 도착 후 사례집 v7 업데이트.
 
+2026-04-19 PM 말미. bb-auditor v1 설계 문서 작성 완료. 스펙 구축은 다음 세션.
+
+## 핵심 설계 결정
+1. 모델: Haiku 4.5 (autofix 가 Sonnet 쓰므로 독립성 확보 + 비용 저렴)
+2. 아키텍처: staging/ 디렉토리 도입. autofix pending → staging, auditor staging → pending
+3. autofix 변경: 1줄만 (write_text 경로)
+4. 판정 3종: pass / redesign / probe_first (v1은 앞 2개만)
+5. 감사 리포트 JSON 원문 보존 (월간 수동 감사용)
+
+## 안전장치
+- kill switch (/root/bb-auditor/PAUSE)
+- staging 15건 누적 → 자동 PAUSE + 알림
+- auditor attempts 3회 cap
+- 예산 월 $10
+- skip_prefix (auditor_*, 오케 코어 관련)
+
+## 구축 순서 (다음 세션 시작 지점)
+Step 1: staging/ 디렉토리 생성 (L1)
+Step 2: autofix.py 1줄 패치 pending→staging (L2)
+Step 3: bb-auditor 디렉토리+venv (L1)
+Step 4: auditor.py 생성 (L3)
+Step 5: cron 등록 (L1)
+Step 6: 테스트 (L2)
+Step 7: 실전 연결 (L1)
+
+예상 2~3세션 걸림.
+
+## 신규 버그 카드 누적 (사례집 v7 대기)
+B27 #draft-not-sent (기각)
+B28 #gmail-query-pipe-miss (해결, 0층 룰)
+B29 #single-query-single-conclusion (해결, 0·1·2층)
+B30 #autofix-body-drift (bb-auditor로 해결 예정)
+B31 #autofix-fatal-rename-race (관찰, 낮은 우선순위)
+
+## 산출물
+bb-auditor_v1_설계_20260419.md (프로젝트 업로드 대기)
+
+## 미해결 / 의문점 (Q1~Q5)
+- auditor 자체 drift 감지는 월간 수동 감사로
+- staging 정체 시 자동 PAUSE 설계
+- Haiku 선택 근거 + 대안
+
+## 상태
+- 오늘 v3 패치 실패로 #stdout-loss 10/10 여전히 미해결
+- main.py = v2 상태 안전
+- 다음 세션: bb-auditor 구축 Step 1~ 순차 진행
+- v3 재설계는 auditor 구축 완료 후 (autofix 우회 경로 + auditor 통과로 안전 진입)
+
 ### 오케 큐 직렬 발송 완료 (9건)
 1. ai_conv_project_columns (L2) — DB 스키마 project 컬럼
 2. memory_infra_health (L1) — 기억 인프라 5종 실사용 조사
@@ -4489,6 +4537,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4497,6 +4547,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
