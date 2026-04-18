@@ -4237,8 +4237,11 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 #### 결정
 - peer_mapping_fix 완료: _safe_id()/spk-xxx 제거, _resolve_speaker_peer() 추가, contacts.display_name + contact_id 기반으로 통일
 - 과거 spk- 3건 중 2건 재매핑(CON-0074 이현재, CON-0131 고명진), 1건(PC발신 룸멤버목록)은 범위 밖 이슈로 기록
+- 작업 D (fix_parse_and_import) PASS: 발신 단톡방 파싱 오류 수정, bibi import 경로 수정
+- 작업 E (layer1_comprehension) PASS: conversation_state 테이블 생성(인덱스 3개), flow_watcher/judge(Haiku)/honcho_context(graceful degradation)/main.py 구현, bb-layer1-comprehension.timer 10분 주기 등록, 첫 실행 39건 판정(오류 0건)
 
 #### 논의 중
 - PC발신 단톡방 메시지에서 speaker가 룸 멤버 목록 전체로 파싱됨 → 별도 작업 필요
 - bibi 모듈 import 실패(p4_hook) → 별도 작업 필요
 - contacts 스키마: id=UUID, display_name, contact_id(CON-xxxx) — spec 의사코드는 정수 PK 가정이었으나 실측 기준으로 구현
+- Honcho v3 JWT 인증 미설정 → honcho_context.py graceful degradation 상태, JWT 설정 후 확장 필요
