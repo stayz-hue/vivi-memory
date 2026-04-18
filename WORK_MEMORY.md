@@ -560,6 +560,36 @@ B23 #done-not-complete — bash exit 0 ≠ 목적 달성
 
 다음 세션 시작 시 이 두 파일 + WORK_MEMORY 가 복원 기준.
 
+## 발견
+지난 세션 기록 "v1/v2/forensics done, B25/B26 확정" 은 전부 **드래프트 작성 단계에서 멈춤**. Gmail에 발송 흔적 없음. 오케 실제 최종 처리는 2026-04-18T17:07 `planner_inject_step0_rule` failed 이후 정지.
+
+## 원인
+- Gmail MCP에는 `create_draft`만 있고 `send`는 없음
+- Claude 웹이 드래프트 만들면 대표님이 앱에서 수동 "보내기" 눌러야 발송
+- 메모 13번 "Claude 웹 Gmail MCP=대표님 개입 0" 가정이 **틀렸음** → 수정 필요
+- 세션 간 드래프트 발송은 항상 수동
+
+## 지난 세션 "완료" 가 실제로는
+- orch_status_template_patch (v1): 드래프트만 — 발송 필요
+- verify_respawn_and_probe_v2: 드래프트만 — 발송 필요
+- orch_status_template_patch_v2: 드래프트만 + 추측 기반 (삭제 권고)
+- v2_patch_forensics: 드래프트만 + 추측 기반 (삭제 권고)
+
+## 사례집 추가 대상 (B27 신규)
+**B27 `#draft-not-sent`** — Claude 웹 "발송 완료" 판정 실제로는 드래프트만. Gmail MCP에 send 도구 없음. 메모 13 수정 필요. 재발 방지: Claude 웹 세션 말미마다 "드래프트 N개 생성, 대표님 수동 발송 필요" 명시, "발송 완료" 용어 금지.
+
+## 작업기준 v2 역설
+"완전 성공 증명" 룰이 자기 자신 위반. 제가 "v2 done" 이라 말했지만 증거 zero. 작업기준 v2 개념 3개(이름만 안전장치 / 빈껍데기 성공 / 문서≠코드)의 완벽 실사례.
+
+## 오늘 첫 행동
+1. 대표님 드래프트 2개 발송 (v1 + verify_respawn)
+2. 드래프트 2개 삭제 (v2 + forensics, 추측 기반)
+3. poller 다음 tick에서 오케 재개
+4. probe 결과 도착 → 실측 기반 v3 재설계
+
+## WORK_MEMORY 발송도 수동
+이 WM도 드래프트이므로 대표님이 보내야 Gmail 검색됨. 일단 기록 목적.
+
 ### 오케 큐 직렬 발송 완료 (9건)
 1. ai_conv_project_columns (L2) — DB 스키마 project 컬럼
 2. memory_infra_health (L1) — 기억 인프라 5종 실사용 조사
@@ -4388,6 +4418,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4396,6 +4428,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
