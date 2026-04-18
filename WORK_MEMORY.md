@@ -10,6 +10,10 @@
 
 #### 결정
 - BB 여진 처리 3건 완료 (Agent Teams 자율 실행, 대표님 질문 0회)
+- 오케스트레이터 부트스트랩 완료: /root/orchestrator/ 생성, bb-orchestrator.timer 5분 주기 등록, test_hello dry-run 통과 (done/ 이동 확인)
+- Gmail OAuth 미설정으로 gmail_poller는 stub. 실제 Gmail 수신은 별도 OAuth 설정 필요.
+- 스펙 실행은 bash 블록 직접 실행 방식 (Claude Code subprocess 연동 미구현)
+- 부트스트랩 검증: timer active, 모듈 10개, heartbeat 2건, bibi /notify HTTP 200, budget $0.0000, 백업 존재 — 전항목 통과
 
 A. 문법 에러 7건: 6건 수정 (MinIO 패치가 try 블록 안에 잘못 삽입된 부산물 — except/finally 복원), 1건 archive (weekly_research.py — 텔레그램 직접 전송 헌법 위반). archive: /root/archive/broken_skills_20260418_061827/
 B. 단톡방 Honcho 투입: 스펙의 "207건"은 오해 (실제 is_group=true는 1건). 진짜 문제는 bb-split 이사 여파 2건 ― (1) vivi-layer1.service WorkingDirectory/ExecStart가 없어진 /root/vivi-layer1을 참조→bb-sonsa/comprehension/vivi_layer1로 수정, (2) honcho_client.py/graphiti_client.py 심링크 누락→bb-os/memory 심링크 복구. pipeline.py에 단톡방 Honcho 투입 코드 추가 (group-{room_name} session, [화자명] 파싱).
