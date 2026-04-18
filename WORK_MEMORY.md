@@ -444,6 +444,48 @@ adb shell pm list packages | findstr -i claude
 
 4계층 에이전트: 설계(Claude 웹→bb-planner) / 실행(오케) / 복구(autofix) / 감지·기억(ViviApp+memory).
 
+2026-04-18 세션 중 누적된 버그 카드 (사례집 v4 업데이트 대기):
+
+B15 #sender-name-misdetect — PC카톡 번역창 오탐
+B16 #autofix-code-drift — Claude API가 code 이름 변형
+B17 #heredoc-pattern-miss — 부분 patch 패턴 매칭 실패
+B18 #spec-split-anti — 조사-패치 분리 습관 (왕복 지옥 원인)
+B19 #gmail-header-case — Gmail API header name 소문자 리턴
+B20 #planner-spec-format-drift — planner 생성 스펙이 오케 린트 불일치
+B21 #duplicate-work-blindness — 이미 완료된 작업 기억 못 하고 중복 지시
+B22 #migration-half-done — 이관 스펙이 5단계 중 일부만 실행
+B23 #done-not-complete — bash exit 0 ≠ 목적 달성
+
+누적 태그 임계 근접:
+- #stdout-loss: 9/10 (내일 1번 스펙으로 해소 예정)
+- #psql-meta: 5/10
+- #bash-strict-mode: 4/10
+2026-04-19 03:30 합의:
+
+오케 자율화 초기에 "속도 vs 꼼꼼"에서 속도로 기울었던 기준을 꼼꼼 쪽으로 재조정.
+
+3단 기준:
+- L1 조사: 속도 OK, DIAG stdout 필수
+- L2 수정: Step 0 현황 → 백업 → 변경 → 구체 지표 검증 → DIAG 증거 직송
+- L3 구축/이관: L2 + 이관 5단계 체크리스트 (복사→참조전환→원본제거→재시작+2분대기→증거)
+
+내일 AM 첫 작업 순서:
+1. orch_status_template_patch (stdout 50줄 포함)
+2. planner_system_prompt_rigor (3단 기준 주입)
+3. autofix_system_prompt_rigor (동일)
+4. migration_repair_vivi_layer1 (반쪽 이관 정리)
+5. migration_repair_precedent (판례 원본 제거)
+6. db_ownership_doc_create (분류표 md 생성)
+
+1~3이 기준을 박는 작업. 박고 나서 4~6 실제 복구.
+
+교훈:
+- B22 #migration-half-done
+- B23 #done-not-complete
+- #stdout-loss 9회 누적 → 1번 스펙으로 해소
+
+배경: 자율일수록 꼼꼼. 사람 눈이 없으면 검증 로직을 스펙 안에 박아야 함.
+
 ### 오케 큐 직렬 발송 완료 (9건)
 1. ai_conv_project_columns (L2) — DB 스키마 project 컬럼
 2. memory_infra_health (L1) — 기억 인프라 5종 실사용 조사
@@ -4264,6 +4306,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4272,6 +4316,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
