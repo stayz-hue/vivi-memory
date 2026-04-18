@@ -486,6 +486,41 @@ B23 #done-not-complete — bash exit 0 ≠ 목적 달성
 
 배경: 자율일수록 꼼꼼. 사람 눈이 없으면 검증 로직을 스펙 안에 박아야 함.
 
+2026-04-19 AM 세션 시작.
+
+## 시작 상태
+- 지난 세션(2026-04-18 야간) 합의: 오케 작업기준 재조정 v1 + B19~B23 사례 5장 추가
+- **프로젝트 파일 누락 확인**: `오케_작업기준_재조정_v1_20260419.md`와 `오케_실패복구_사례집_v4_20260419.md`가 프로젝트에 업로드 안 됨
+- 지난 대화 기억으로 두 파일 재생성 → 대표님이 프로젝트에 업로드 필요
+
+## 이번 세션 첫 작업
+**orch_status_template_patch** Gmail 드래프트 발송 완료 (draft id: r8672086103263868080)
+- 제목: `ORCHESTRATOR_SPEC|orch_status_template_patch|STATUS 메일 stdout 50줄 포함 개편`
+- risk L2, max_retries 2 (autofix 위임 여유)
+- 5분 내 오케 poller 자동 픽업 예정
+
+## 스펙 설계 선택
+- B18 #spec-split-anti 원칙(한 스펙 조사+패치)을 **오케 코어 수정은 예외**로 v1 기준에 박음
+- 이유: 오케 자체 코드 구조 미확정 상태에서 Python 자동 패치는 왕복 비용 < 위험도
+- Step 2가 자동 탐지 실패 시 `exit 1` → autofix 위임. max_retries 2로 재시도 여유
+
+## 다음 흐름
+1. probe DIAG 메일(`DIAG_RESULTS|orch_status_template_patch|probe`) 5~10분 내 도착 예상
+2. autofix가 Step 2 실패 시 probe 결과 + 스펙 본문 보고 재설계
+3. 검증 스펙(`status_template_verify.md`)이 pending/에 투입되어 STDOUT_MARKER_20260419 grep으로 최종 성공 판정
+
+## 남은 AM 순서
+2. planner_system_prompt_rigor (3단 기준 주입)
+3. autofix_system_prompt_rigor (동일)
+4. migration_repair_vivi_layer1
+5. migration_repair_precedent
+6. db_ownership_doc_create
+
+## 이번 세션 인사이트
+- **프로젝트 파일 ↔ 메모리 시차** 패턴 재발: 세션 끝에 만든 md가 프로젝트 업로드 안 되면 다음 세션이 빈손 시작. 
+- **해소 방안**: 세션 말미 Claude가 "프로젝트 업로드 대기" 파일 목록을 별도 명시하고, 대표님에게 업로드 리마인더를 명시적으로 남긴다. present_files 직후 한 줄 확인.
+- 이번 세션에는 Claude가 지난 대화 기억으로 재구성 가능했으나, 3~4 세션 뒤에는 기억 롤오프로 복원 불가 가능성 있음.
+
 ### 오케 큐 직렬 발송 완료 (9건)
 1. ai_conv_project_columns (L2) — DB 스키마 project 컬럼
 2. memory_infra_health (L1) — 기억 인프라 5종 실사용 조사
@@ -4308,6 +4343,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4316,6 +4353,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
