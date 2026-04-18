@@ -35,6 +35,11 @@ LOGGING_STANDARD v1 보강 필요 항목:
    - 표준 문서에 "경로 리네임 작업 anti_evidence 기본 패턴" 예시로 박기
 2026-04-18 클코 Agent Teams 자율 실행으로 완료.
 
+#### 결정 (작업 D — fix_parse_and_import)
+- 이슈 1: PC카톡 발신 단톡방 파싱 오류 수정. parse_webhook()에서 쉼표 포함 bracket_match를 speaker로 세팅 안 하도록, process_message()에서 멤버목록 형식 room_name → "단톡방"으로 대체. 과거 오염 데이터 3건(id:117,470,473) sender_name="단톡방"으로 정정.
+- 이슈 2: bibi import 실패 수정. sys.path.insert('/root') → '/root/bb-sonsa/comprehension'으로 변경. vivi-layer1 재시작 후 에러 없음.
+- 수정 파일: /root/bb-sonsa/comprehension/vivi_layer1/pipeline.py
+
 ## 작업 A (문법에러)
 - 7건 전부 처리 완료
 - 상세는 클코 대화 이력 참조
