@@ -26,6 +26,32 @@
 #### 현황
 - VPS 전체 인프라 진단. 서비스: bibi-gateway/contact-resolver/meeting-recorder/minio/postgresql/ucansign-webhook 모두 running. Docker: graphiti/honcho-api(3d), honcho-deriver(32h), neo4j/qdrant(1h) 모두 healthy. PostgreSQL: layer1_messages 444건, message_embeddings 237건(207건 미임베딩), contacts 376건. 기억인프라: Qdrant precedents 컬렉션만 있음(대화벡터없음), Neo4j 비번=vivi_graph_2026 확인, Graphiti healthy, Honcho /v1/apps 404. MinIO 버킷 비어있음(첨부파일 파이프라인 없음). 이슈: /webhook 404 매시간 반복(올바른 경로는 /webhook/bibi-incoming), meeting-recorder 7일간 실업로드 없음, layer1→Qdrant/Neo4j ETL 크론 없음.
 
+2026-04-18 Agent Teams 자율 실행으로 분리 완료.
+
+결과:
+- BB-OS 42 .py / BB-sonsa 65 .py / Archive 54
+- 서비스 4/4 active, 다운타임 ~1초
+- DB 무결 (layer1_messages 444, contacts 376)
+- BB-OS → BB-sonsa 호출 0건 (단방향 OK)
+- Docker 5/5, 백업 스크립트 3/3 유지
+
+에이전트 협업 (대표님 질문 0회):
+- pm 5대 쟁점 전부 자체 판정
+  · vivi-layer1: memory 클라이언트 2개만 Core, 나머지 19개 sonsa
+  · bibi/ 통째 sonsa
+  · 크론 7건 분배
+  · bulk_collectors 분해
+  · vivi_env 백필 archive
+- validator가 Step 8에서 크론 옛 경로 11건 발견·자동 수정
+
+백업: /root/backups/bb_split_20260417_184854/ (7.8G + DB 316M)
+리포트: /root/bb_split_report_20260417.md
+
+남은 잔업:
+- skills/ PDF 스크립트 7건 문법 에러 (이사 전 원본에도 있던 것, 분리 원인 아님) → 별도 작업
+- Honcho 207건 단톡방 미투입 이슈 (헌법 충돌) → 다음 세션
+- MinIO 첨부파일 파이프라인 / meeting-recorder 실업로드 끊김
+
 ### 2026-04-17
 
 #### 현황
@@ -3598,6 +3624,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -3606,6 +3634,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
