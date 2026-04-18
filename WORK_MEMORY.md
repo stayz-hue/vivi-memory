@@ -151,6 +151,32 @@ peer_mapping_fix 완료. 클코 Agent Teams 자율 실행.
 - 예: peer_mapping_fix_spec.md (O) / peer mapping fix spec.md (X)
 - scp 명령어도 따옴표 불필요
 
+작업 D·E 완료.
+
+작업 D:
+- pipeline.py: 쉼표 포함 bracket을 speaker로 세팅 금지
+- 과거 오염 3건 정정 (id 117, 470, 473)
+- bibi import sys.path를 /root/bb-sonsa/comprehension으로 변경
+
+작업 E:
+- conversation_state 테이블 + 인덱스 3개
+- /root/bb-os/comprehension/ 7개 파일
+- bb-layer1-comprehension.timer 10분 주기 활성
+- 수동 실행 39건 판정 (pending 32, achieved 6, deferred 2, 에러 0)
+
+검증 5건 전부 합리적:
+- CON-0059 achieved/5 (엄마 차 텐트 대화)
+- CON-0109 deferred/3 (팩스, 검토 후 연락)
+- CON-0321 pending/4 (팩스 발송, 응답 없음)
+- CON-0315 pending/3 (상담 요청만)
+- CON-0324 pending/3 (인증코드)
+
+범위 밖 발견:
+1. Honcho v3.0.6 JWT 미설정 - honcho_context graceful degradation, 별도 작업
+2. vivi-layer1.service 경로 /root/bb-sonsa/comprehension/ 참조 중인데 디렉토리 미생성 - 지금 작동하는 이유 확인 필요
+
+다음 확인: 내일 SELECT COUNT(*), outcome FROM conversation_state GROUP BY outcome 분포
+
 ### 2026-04-18 (이전 기록)
 
 #### 현황
@@ -3803,6 +3829,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -3811,6 +3839,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
