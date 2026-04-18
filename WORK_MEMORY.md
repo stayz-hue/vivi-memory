@@ -432,6 +432,33 @@ adb shell pm list packages | findstr -i claude
 
 ## KakaoOutgoingService.kt 구조 분석
 
+## 오늘밤 야간 작업 (2026-04-18 ~ 19)
+
+### 오케 큐 직렬 발송 완료 (9건)
+1. ai_conv_project_columns (L2) — DB 스키마 project 컬럼
+2. memory_infra_health (L1) — 기억 인프라 5종 실사용 조사
+3. layer1_dedup_check (L1) — 카톡 중복 저장 점검
+4. layer0_coverage_gap (L1) — 0층 감지 누락 현황
+5. db_ownership_audit (L1) — 테이블 Core/손사 분류
+6. backup_restore_rehearsal (L2) — 백업 복구 리허설
+7. precedents_to_sonsa (L2) — 판례 크론 손사 이관
+8. vivi_layer1_core_migrate (L3) — 1층 Core 이관 (헌법 위반 해소)
+
+### 대표님 내일 할 손작업
+- PC 확장 v2 교체 (zip 전달)
+- ViviApp Claude 감지 빌드 (ClaudeChatService.kt + 빌드 가이드 md 전달)
+  - 토큰 교체, Claude 패키지명 adb 확인, Manifest/xml 추가, AS 빌드, APK 설치, 권한 9종
+
+### 프로젝트 분류 구현
+- DB: project_uuid/project_name 컬럼
+- PC 확장: project 정보 자동 추출 후 POST
+- 모바일: UUID 확보 불가로 임시 "mobile-{분}" → PC에서 같은 대화 열면 자동 보강
+
+### PC 확장 v2 기능
+- 현재 대화 10초 poll
+- 전체 대화 목록 5분 스캔 (최근 30개)
+- 교차 사용 누락 방지 (A모바일→B PC 케이스)
+
 ### 하드코딩 포인트
 - `KAKAO_PACKAGE = "com.kakao.talk"`
 - `info.packageNames = arrayOf(KAKAO_PACKAGE)` — 단일 패키지만 감시
@@ -4215,6 +4242,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4223,6 +4252,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
