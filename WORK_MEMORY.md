@@ -363,6 +363,24 @@ AI 대화뿐 아니라:
 ## 연결
 BB for AI-watch + 검증시스템 통합 오케가 이 역할 담당.
 
+## 상황
+모바일(ViviApp Accessibility) Claude 앱 감지 확장 시도 → ViviApp 소스 위치 불명으로 막힘.
+
+## 확인된 것
+- VPS에 ViviApp 소스 없음 (`find /root -iname "*vivi*app*"` 0건)
+- 개발팀 메모리: "Android: ViviApp with AccessibilityService (KakaoTalk outgoing), SMS via MacroDroid" — 위치 기록 없음
+- 개발팀도 소스 위치 모름 답변
+
+## 필요한 조치
+- 개발팀에 ViviApp 소스 보관 위치 문의
+- GitHub 저장소 or PC Android Studio 프로젝트 확인
+
+## 그동안 대안
+PC 크롬 확장(https://stayz90.com/ingest/claude)이 Claude 계정 동기화로 모바일 대화까지 긁어옴. 모바일 네이티브 감지 공백 실질 영향 낮음.
+
+## 재개 조건
+개발팀에서 소스 위치 확보되면 Claude 패키지(com.anthropic.claude) 추가 스펙 발송.
+
 ### 컨셉
 비비에 오케스트레이터 내장. 사용자는 그냥 비비 사용.
 오케가 사용자 AI 사용 패턴 학습 → 파서 자동 생성·설치·유지보수.
@@ -4105,6 +4123,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4113,6 +4133,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
