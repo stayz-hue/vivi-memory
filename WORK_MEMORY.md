@@ -17,6 +17,50 @@ C. MinIO/meeting-recorder: MinIO 버킷 4개 정상(오브젝트 59개). meeting
 
 통합 검증: systemd 6/6 active, Docker 5/5 healthy, 문법 에러 0건, 단방향 의존성 유지, DB layer1=452/messages=247/embeddings=247/contacts=378.
 
+LOGGING_STANDARD v1 보강 필요 항목:
+
+1. "Step 종료 시 즉시 리포트 작성" 규칙 추가
+   - 현재: 최종 통합 Step에서 몰아 씀 → 까먹을 위험
+   - 개선: 각 작업 종료 시점에 report.md를 작업 단위로 즉시 append
+   - validator가 다음 작업 진입 전 이전 작업 리포트 존재 확인 의무화
+
+2. "스펙 오해 조기 탐지" 규칙
+   - 이번 작업 B에서 "207건 단톡방"이라는 전제 자체가 틀렸음 (실제 1건)
+   - Step 0 실측 단계에 "스펙 전제 재확인" 쿼리 박기
+   - 수치/비율/파일수 등 정량 전제는 반드시 실측으로 검증 후 진행
+
+3. anti_evidence 실제 사례 추가
+   - BB-OS 분리 때 놓친 sys.path.insert 경로 문제
+   - grep "/root/[구경로]" /root/bb-os로 탐지 가능했음
+   - 표준 문서에 "경로 리네임 작업 anti_evidence 기본 패턴" 예시로 박기
+2026-04-18 클코 Agent Teams 자율 실행으로 완료.
+
+## 작업 A (문법에러)
+- 7건 전부 처리 완료
+- 상세는 클코 대화 이력 참조
+
+## 작업 B (단톡방 Honcho)
+- 스펙 오해 발견: "207건 단톡방"이라고 적었는데 실제는 is_group=true 1건, 나머지는 구형 payload였음
+- vivi-layer1.service 경로 수정: BB-OS 분리 후 /root/vivi-layer1 없어짐 → /root/bb-sonsa/comprehension/vivi_layer1
+- pipeline.py 수정: if _memory_enabled and not is_group → if _memory_enabled 단독 + 단톡방 group-{room_name} 세션/화자 파싱 추가
+- 심링크 복구: honcho_client.py, graphiti_client.py → bb-os/memory/
+
+## 작업 C (MinIO + meeting-recorder)
+- MinIO 버킷 4개 정상, 오브젝트 59개 존재 → 추가 조치 불필요
+- meeting-recorder 7일 실업로드 원인: server.py 16번줄 sys.path.insert(0, "/root/bibi-gateway") → BB-OS 분리로 사라진 경로. /root/bb-os/capture/bibi_gateway로 수정하여 해소.
+
+## 최종 상태
+- systemd 6/6 active, Docker 5/5 healthy
+- 문법에러 0건, 단방향 의존성 유지
+- DB 무결: layer1=452, messages=247, contacts=378
+
+## BB-OS 분리 회고
+- 이번 meeting-recorder 끊김은 분리 작업 때 놓친 sys.path.insert 경로 때문. anti_evidence 쿼리에 grep "/root/bibi-gateway" /root/bb-os 있었다면 즉시 탐지됐을 것. LOGGING_STANDARD v1의 "틀린 증거" 원칙 필요성 실증.
+
+## 남은 이슈
+- Step 8 최종 통합 리포트 자동 생성 누락 (클코가 마지막에 몰아 쓰려다 놓침). 대표님 요청으로 현재 생성 중.
+- 스펙 개선: "Step 종료 시 즉시 리포트" 규칙을 LOGGING_STANDARD에 추가 필요.
+
 ### 2026-04-18 (이전 기록)
 
 #### 현황
@@ -3655,6 +3699,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -3663,6 +3709,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
