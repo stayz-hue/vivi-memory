@@ -61,6 +61,27 @@ LOGGING_STANDARD v1 보강 필요 항목:
 - Step 8 최종 통합 리포트 자동 생성 누락 (클코가 마지막에 몰아 쓰려다 놓침). 대표님 요청으로 현재 생성 중.
 - 스펙 개선: "Step 종료 시 즉시 리포트" 규칙을 LOGGING_STANDARD에 추가 필요.
 
+BB 여진 3작업 실동작 검증 완료.
+
+## meeting-recorder 복구 확증
+- 대면녹음 80KiB 업로드 성공 (vivi-meetings/20260418_045959_...)
+- 화자 분리 STT까지 정상 동작 ("[00:00] 화자1: 안녕하세요, 반갑습...")
+- 7일 끊김 원인(sys.path.insert 구경로) 해소 확인
+
+## MinIO
+- vivi-documents, vivi-meetings 버킷 실제 쓰기 정상
+- 총 오브젝트 59개 + 당일 2개 추가
+
+## 단톡방 Honcho
+- pipeline.py 수정은 완료, 수정 이후 단톡방 수신 대기 중
+- 대표님이 PC카톡 단톡방에 "ㅋ" 발신 완료
+- 검증 쿼리: SELECT session_name FROM messages WHERE session_name LIKE 'group-%'
+
+## 교훈 (LOGGING_STANDARD v2 반영 예정)
+- "207건 단톡방" 전제 실측 없이 설계서에 박은 게 오해의 출발
+- Step 0 실측에 "스펙 전제 수치 재검증" 의무화 필요
+- BB-OS 분리 때 sys.path.insert 놓친 것도 같은 맥락: anti_evidence로 grep 패턴 박았으면 즉시 탐지
+
 ### 2026-04-18 (이전 기록)
 
 #### 현황
@@ -3703,6 +3724,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -3711,6 +3734,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
