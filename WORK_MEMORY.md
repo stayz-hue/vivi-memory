@@ -521,6 +521,45 @@ B23 #done-not-complete — bash exit 0 ≠ 목적 달성
 - **해소 방안**: 세션 말미 Claude가 "프로젝트 업로드 대기" 파일 목록을 별도 명시하고, 대표님에게 업로드 리마인더를 명시적으로 남긴다. present_files 직후 한 줄 확인.
 - 이번 세션에는 Claude가 지난 대화 기억으로 재구성 가능했으나, 3~4 세션 뒤에는 기억 롤오프로 복원 불가 가능성 있음.
 
+2026-04-19 AM 세션 마무리 기록.
+
+## 작업 결과
+- orch_status_template_patch (v1) done, 완전 성공 미달 (경로 추측 실패로 PATCH_DEFERRED)
+- verify_respawn_and_probe_v2 done (B24 원인 근거 확정 + 오케 소스 전량 확보)
+- orch_status_template_patch_v2 done, 완전 성공 미달 (B25/B26 구조 버그 노출)
+- v2_patch_forensics done (B25/B26 확정)
+
+## 완전 성공 미달 판정 근거
+- STATUS 메일 본문 "최근 이벤트" 섹션에 STDOUT_MARKER_V2_20260419 미포함
+- 원인 = B25 (send-before-update) + B26 (queue-empty-overwrite)
+- 패치 자체는 정상 적용+동작. main.py 구조상 한 스텝 늦은 반영 + 5분 주기 덮어쓰기로 증거 소실
+
+## 신규 발견
+- B24 해결: run_spec regex 확정, 작업기준 v2 룰화
+- B25 신규: gmail_sender.send_status → update_status 순서 문제
+- B26 신규: queue empty 분기에서 "- (없음)" 하드코딩 덮어쓰기
+- 수확 7개 (오케 경로/린터/런너/systemd timer/dry-run 빈껍데기/큐 5가지/_is_done 재활용)
+- 개념 3개 (이름만 있는 안전장치 / 빈껍데기 / 문서 vs 코드)
+
+## 다음 우선 작업
+1. orch_status_template_patch_v3 (B25+B26 동시 해소)
+2. planner_system_prompt_rigor (L2 자가검증)
+3. autofix_system_prompt_rigor (동일)
+4. bb_auditor_v1_build (L3 타자검증)
+
+## 산출물 (프로젝트 업로드 대기)
+- 오케_작업기준_재조정_v2_20260419.md
+- 오케_실패복구_사례집_v5_20260419.md
+- (v1, v4 는 삭제 권장 — 상위 버전으로 대체됨)
+
+## 대표님 숙지 내용
+작업기준 v2 의 3가지 인지 개념 섹션:
+1. 이름만 있는 안전장치 ≠ 작동하는 안전장치
+2. 빈껍데기 "완료" 알림은 무조건 의심
+3. probe 돌리겠다는 판단 막지 말 것
+
+다음 세션 시작 시 이 두 파일 + WORK_MEMORY 가 복원 기준.
+
 ### 오케 큐 직렬 발송 완료 (9건)
 1. ai_conv_project_columns (L2) — DB 스키마 project 컬럼
 2. memory_infra_health (L1) — 기억 인프라 5종 실사용 조사
@@ -4347,6 +4386,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4355,6 +4396,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
