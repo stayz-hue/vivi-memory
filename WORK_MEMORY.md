@@ -4180,3 +4180,14 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-07~09: 유캔싸인 통합, PC카톡 감지, Contact Identity Resolution, v7 비비 헌법 방향(규칙→성향)
 - 2026-04-04~06: SOUL.md 완성, Hermes Agent 설치, 케이스 시트 23컬럼, 통화녹음 STT 파이프라인
 - 2026-04-03: 메모리 프레임워크 5개 비교 (Honcho 1순위 추천), Hermes 1차 조사
+
+### 2026-04-18
+
+#### 결정
+- peer_mapping_fix 완료: _safe_id()/spk-xxx 제거, _resolve_speaker_peer() 추가, contacts.display_name + contact_id 기반으로 통일
+- 과거 spk- 3건 중 2건 재매핑(CON-0074 이현재, CON-0131 고명진), 1건(PC발신 룸멤버목록)은 범위 밖 이슈로 기록
+
+#### 논의 중
+- PC발신 단톡방 메시지에서 speaker가 룸 멤버 목록 전체로 파싱됨 → 별도 작업 필요
+- bibi 모듈 import 실패(p4_hook) → 별도 작업 필요
+- contacts 스키마: id=UUID, display_name, contact_id(CON-xxxx) — spec 의사코드는 정수 PK 가정이었으나 실측 기준으로 구현
