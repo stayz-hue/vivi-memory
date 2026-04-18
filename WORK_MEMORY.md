@@ -408,6 +408,28 @@ PC 클코 실행 → 소스 찾기 → 수정 → Android Studio 빌드 → APK 
 ## 다음 액션
 소스 경로 확보되면 KakaoOutgoingService.kt 내용 보고 Claude 감지 클래스 설계 지시서 작성.
 
+## ViviApp 소스 경로 (확정)
+- 프로젝트 루트: `C:\Users\admin\Desktop\files\ViviApp`
+- 패키지: `com.vivilaw.app`
+
+## 핵심 파일
+- `app/src/main/java/com/vivilaw/app/KakaoOutgoingService.kt` — 카톡 발신 감지 (AccessibilityService)
+- `app/src/main/java/com/vivilaw/app/notification/ViviNotificationListener.kt` — 알림 수신 감지
+- `app/src/main/java/com/vivilaw/app/SmsOutgoingObserver.kt`
+- `app/src/main/java/com/vivilaw/app/autodetect/AutoDetectService.kt`
+- `app/src/main/java/com/vivilaw/app/recording/MeetingRecordingService.kt`
+
+## 다음 액션
+1. `KakaoOutgoingService.kt` 내용 확인
+2. 패키지 필터가 하드코딩인지 config인지 판정
+3. Claude 감지 클래스 추가 or 기존에 `com.anthropic.claude` 패키지 추가
+4. Android Studio 빌드 → APK 재설치 → 접근성 권한 9종 재부여
+
+## Claude 앱 패키지명 확인 명령 (PC에서)
+```
+adb shell pm list packages | findstr -i claude
+```
+
 ### 컨셉
 비비에 오케스트레이터 내장. 사용자는 그냥 비비 사용.
 오케가 사용자 AI 사용 패턴 학습 → 파서 자동 생성·설치·유지보수.
@@ -4154,6 +4176,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4162,6 +4186,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
