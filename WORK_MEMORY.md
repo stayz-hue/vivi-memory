@@ -8,6 +8,17 @@
 ## [최근 3일]
 ### 2026-04-18
 
+#### 결정
+- BB 여진 처리 3건 완료 (Agent Teams 자율 실행, 대표님 질문 0회)
+
+A. 문법 에러 7건: 6건 수정 (MinIO 패치가 try 블록 안에 잘못 삽입된 부산물 — except/finally 복원), 1건 archive (weekly_research.py — 텔레그램 직접 전송 헌법 위반). archive: /root/archive/broken_skills_20260418_061827/
+B. 단톡방 Honcho 투입: 스펙의 "207건"은 오해 (실제 is_group=true는 1건). 진짜 문제는 bb-split 이사 여파 2건 ― (1) vivi-layer1.service WorkingDirectory/ExecStart가 없어진 /root/vivi-layer1을 참조→bb-sonsa/comprehension/vivi_layer1로 수정, (2) honcho_client.py/graphiti_client.py 심링크 누락→bb-os/memory 심링크 복구. pipeline.py에 단톡방 Honcho 투입 코드 추가 (group-{room_name} session, [화자명] 파싱).
+C. MinIO/meeting-recorder: MinIO 버킷 4개 정상(오브젝트 59개). meeting-recorder server.py 16번 줄 sys.path "/root/bibi-gateway" → "/root/bb-os/capture/bibi_gateway" 수정 (bb-split 이사 여파). 7일 실업로드 원인 해소.
+
+통합 검증: systemd 6/6 active, Docker 5/5 healthy, 문법 에러 0건, 단방향 의존성 유지, DB layer1=452/messages=247/embeddings=247/contacts=378.
+
+### 2026-04-18 (이전 기록)
+
 #### 현황
 - 파이프라인 구조 최종 재확정. layer1 honcho_client가 저장한 contact_id(CON-0315~0320 등)와 messages의 peer_name(CON-0303, CON-0050 등)이 완전히 겹치지 않음. messages 237건의 실제 공급원은 Hermes gateway(gateway/platforms/webhook)가 카카오 웹훅을 독립 수신하여 저장한 것. layer1의 honcho_client는 16건만 저장(사실상 dead path). 카카오 웹훅이 layer1과 Hermes gateway 두 곳으로 병렬 전달되는 이중 수신 구조. message_embeddings synced 237건/pending 0건으로 임베딩 완전 정상.
 
