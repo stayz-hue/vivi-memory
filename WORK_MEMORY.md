@@ -430,6 +430,41 @@ PC 클코 실행 → 소스 찾기 → 수정 → Android Studio 빌드 → APK 
 adb shell pm list packages | findstr -i claude
 ```
 
+## KakaoOutgoingService.kt 구조 분석
+
+### 하드코딩 포인트
+- `KAKAO_PACKAGE = "com.kakao.talk"`
+- `info.packageNames = arrayOf(KAKAO_PACKAGE)` — 단일 패키지만 감시
+- `WEBHOOK_URL = "https://stayz90.com/webhook/bibi-incoming"`
+
+### 카톡 UI 전용 로직
+- `findOutgoingText`: 화면 오른쪽(screenWidth/2 초과) = 발신 판정
+- `findRoomNameBFS`: Toolbar/ActionBar 내 TextView에서 방 이름 추출
+- `handleWindowContentChanged`: MultiAutoCompleteTextView 입력창 empty 감지로 전송 판정
+- RecyclerView 마지막 자식 스캔으로 PC 발신 캐치
+
+### 결론
+카톡 코드 재사용 불가. Claude 앱용 ClaudeChatService.kt 신규 필요.
+
+## Claude 모바일 감지 신규 작업 범위
+1. Claude 앱 패키지명 확인: `adb shell pm list packages | findstr claude`
+2. Claude 앱 UI 노드 dump (uiautomator viewer)
+3. ClaudeChatService.kt 신규 (AccessibilityService 상속)
+4. AndroidManifest.xml 서비스 등록
+5. accessibility_service_config.xml 추가
+6. Android Studio 빌드 → APK → 기기 설치 → 접근성 권한 재부여
+
+### 소요 시간
+UI 분석 1~2h, 전체 4~6h
+
+## 우선순위 판단
+**현재 낮음.** PC 크롬 확장이 Claude 계정 동기화로 모바일 대화까지 수집 중. 모바일 네이티브 감지 없어도 실질 커버리지 100%.
+
+"모바일만 쓰는 경우"는 엣지 케이스. PC 확장 1주일 실전 후 누락 확인되면 그때 착수.
+
+## 다음 액션 (여유 있을 때)
+Claude 앱 UI dump → 설계 → 구현. 별도 세션.
+
 ### 컨셉
 비비에 오케스트레이터 내장. 사용자는 그냥 비비 사용.
 오케가 사용자 AI 사용 패턴 학습 → 파서 자동 생성·설치·유지보수.
@@ -4178,6 +4213,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4186,6 +4223,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
