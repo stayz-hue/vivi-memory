@@ -621,6 +621,36 @@ B23 #done-not-complete — bash exit 0 ≠ 목적 달성
 ## 다음 작업
 orch_status_template_patch_v3 설계 (B25+B26 동시 해소). 지금 세션에서 이어갈지 내일로 미룰지 대표님 판단.
 
+2026-04-19 PM. orch_status_template_patch_v3 스펙 발송 완료.
+
+## 작업기준 v3 첫 적용 사례
+- 0층 실측 3규칙 통과: verify_respawn probe 메일 + v2_patch_forensics probe 메일 2개 독립 증거 교차
+- 1층 체크리스트 5개 전부 ✓
+- 2층 프리플라이트 (a)(b)(c)(d)(e) 전부 작성 완료, 본 세션 응답에 공개
+
+## 기술 요약
+- B25 `#send-before-update` 해소: main() 재배치, if success/else 분기 안에서 send_status 이전 update_status 호출
+- B26 `#queue-empty-overwrite` 해소: 큐 empty 분기에 _extract_prev_events 헬퍼로 이전 events 보존
+- v2 run_spec stdout_tail 로직은 그대로 유지 (run_spec 함수 건드리지 않음)
+- 수정 범위: main.py의 main() 함수 전체 재작성. 약 110줄.
+- 백업: /root/backups/20260419_orch_status_template_patch_v3/
+
+## 발송 경로
+ORCHESTRATOR_SPEC|orch_status_template_patch_v3|... 드래프트 생성됨. Gmail poller 가 스캔 후 pending 에 투입 → 오케 실행.
+
+## 검증 기준
+2단계 확인:
+1. ORCHESTRATOR_STATUS|orch_status_template_patch_v3|done 메일에 "=== 마지막 작업 stdout ===" 섹션 포함 → B25 해소 증명
+2. ORCHESTRATOR_STATUS|status_template_verify_v3|done 메일에 STDOUT_MARKER_V3_20260419 grep 성공 → B26 해소 (+ 한 스텝 늦음 없이 본인 자신 stdout 담김) 증명
+
+## 만약 실패 시
+- v2 상태로 자동 복원 (stdout 한 스텝 늦게는 도달)
+- /root/backups/.../main.py.bak 에서 cp 복구
+- 다른 시스템 영향 zero
+
+## 상태
+스펙 대기 중. 오케 다음 tick 에서 처리 예정. 결과 메일 도착 후 사례집 v7 업데이트.
+
 ### 오케 큐 직렬 발송 완료 (9건)
 1. ai_conv_project_columns (L2) — DB 스키마 project 컬럼
 2. memory_infra_health (L1) — 기억 인프라 5종 실사용 조사
@@ -4455,6 +4485,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4463,6 +4495,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
