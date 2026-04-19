@@ -77,6 +77,43 @@ Step 4: auditor.py 본체 생성 (L3)
 - Step 4부터 재개
 
 신뢰할 수 있는 마일스톤까지 왔습니다. 다음 세션에서 auditor.py 본체 집중 구현으로 3층 완공 목표.
+2026-04-19 PM 세션 핵심 관찰 3건.
+
+## 1. B30 재실증 (최중요)
+
+어제 `orch_status_template_patch_v3|done` (2026-04-18 20:33) 처리됐으나 **STATUS 메일 여전히 "최근 이벤트 (없음)"**. v3 패치는 done 찍혔지만 실제 로직은 한 줄도 안 고쳐짐. autofix body-drift (B30) 의 가장 선명한 실시간 증거.
+
+사례집 v7 카드 후보:
+- 원인: autofix 가 v3 수정본 만들 때 frontmatter code 는 유지했으나 본문 patch 로직 변형. ast.parse 통과 + exit 0 → 오케 done 판정. spec_linter 는 구문 검증만, 의도 검증 없음.
+- 교훈: **done 판정은 의도 달성을 증명하지 못한다**. 작업기준 v3 "완전 성공 증명" 룰의 강력한 실사례.
+- 3층 bb-auditor 있었으면: redesign 판정 → quarantine/ → B25/B26 여전히 해결 안 된 상태 발견 → 대표님 직접 대응 경로.
+
+## 2. probe 최종 실패 + Gmail 경로 회수 불가
+
+`autofix_probe_for_auditor` max_retries 1 소진. STATUS 메일 full body 에 stdout 전혀 없음. Gmail/bibi 양쪽 모두 실패 원인 회수 불가. VPS SSH 직접 확인 요청.
+
+bibi-gateway(5114) 는 작동 중 ("ORCH 🚨 최종 실패" 알림 도달). 오케 자체의 STATUS 템플릿만 먹통.
+
+## 3. Gmail MCP `get_thread` 발견
+
+첫 tool_search("gmail create draft send") 에서 get_thread 누락 → 두번째 tool_search("get thread message body full content") 에서 등장. **B29 `#single-query-single-conclusion` 재발**. tool_search 한 번으로 도구 목록 전수 판단 금지.
+
+Step 4 스펙 설계 규칙에 반영: Gmail 경로만으로 STATUS 회수 불가능한 경우 (B25/B26 지속 상황) auditor.py 내에서 ``logs/audit_reports/`` 로컬 저장 + bibi 요약 알림 2중 구조 필수.
+
+## 다음 단계 (대표님 SSH 응답 대기)
+
+1. probe 실패 원인 파악 (failed/.retry + logs/orch.log)
+2. autofix.py 원본 처리 경로 확정 (load_original 설계 최종 근거)
+3. 둘 다 확보되면 Step 4 auditor.py 본체 스펙 바로 작성
+
+## 태그 카운터 업데이트 후보
+
+- #autofix-body-drift (B30): +1 (v3 실사례). 사례집 v6 기록분 + 이번 = 누적 2회 이상. 10회 임계까지 추적.
+- #single-query-single-conclusion (B29): +1 (tool_search 도구 전수 실패). 사례집 v6 기록분 + 이번.
+- #stdout-loss: +1 (v3 done 후에도 지속). 10/10 이상 누적.
+
+다음 세션 산출물: 이 3건을 사례집 v7 카드로 정리 (사례집 v6 교체 업로드).
+
 ### 2026-04-18
 
 #### 결정
@@ -4620,6 +4657,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4628,6 +4667,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
