@@ -6,6 +6,77 @@
 ---
 
 ## [최근 3일]
+### 2026-04-19
+
+2026-04-19 오후 세션 마무리. bb-auditor v1 구축 Step 1~3 완료, Step 4(L3) 다음 세션 시작.
+
+## 진행 상황: bb-auditor v1 구축
+
+**완료 (Step 1~3)**:
+✅ Step 1: staging/ 디렉토리 생성 (L1, 21:35 완료)
+✅ Step 2: autofix.py pending→staging 경로 변경 (L2, 21:48 완료, 우회 성공)
+✅ Step 3: bb-auditor 디렉토리+venv+SDK (L1, 00:19 완료)
+
+**대기 (Step 4~7)**:
+- Step 4: auditor.py 본체 생성 (L3, 200~300줄 Claude API 프롬프트 설계)
+- Step 5: cron 등록 (L1) 
+- Step 6: 테스트 (L2)
+- Step 7: 실전 연결 (L1)
+
+## 핵심 성과
+
+**B30 #autofix-body-drift 실증**: 오늘 v3 패치에서 autofix가 code는 유지하되 body Python 로직을 변형. "성공" 알림이지만 실제 목적 미달성. → bb-auditor 구축 최우선 근거 확보.
+
+**작업기준 v3 수립**: Claude 웹 대화 단계의 지시 실수 방어 체계 (0층 실측 3규칙 / 1층 파괴적 지시 체크리스트 / 2층 프리플라이트). B29 단독판단 취약성 대응.
+
+**bb-auditor v1 설계 확정**: 3층 타자검증. staging/ 경유 구조, Haiku 4.5 모델, 2판정(pass/redesign), env var 교체 가능.
+
+## 신규 버그 카드 (사례집 v7 후보)
+
+**B30 #autofix-body-drift** (최중요): autofix가 frontmatter code는 force로 유지하지만 body 로직 변형. ast.parse 검증 통과해도 실제 수행 로직 이탈 가능. bb-auditor로 해결 예정.
+
+**B31 #autofix-fatal-rename-race**: autofix 중복 처리 (오늘 2회 발생). FATAL이지만 시스템 영향 없음. 관찰 단계.
+
+**B32 #assumption-vs-reality-mismatch**: Claude 웹의 앵커 카운트 추정 틀림(pending 1회 → 실제 2회). transcript 기반 추정의 한계. Step 0 실측 확대 필요.
+
+## 현재 인프라 상태
+
+- **autofix.py**: staging/ 경유 설정 완료. 다음 failed 발생시 staging→auditor→pending 흐름 시작 (auditor 아직 없으니 staging/ 쌓일 예정)
+- **오케 main.py**: v2 상태 안전 (#stdout-loss 10/10 여전히 미해결)
+- **bb-auditor**: 디렉토리+venv+SDK 준비 완료, auditor.py 본체만 남음
+- **시스템 전체**: 정상 작동, 백업 존재
+
+## 다음 세션 첫 작업
+
+Step 4: auditor.py 본체 생성 (L3)
+- Claude API 호출 + system/user 프롬프트 설계
+- 판정 체크리스트 6개 → JSON 응답 → pass/redesign 분기
+- 안전장치 6개 (kill switch, budget, skip_prefix 등)
+- base64 encode 방식 스펙 삽입
+
+예상 소요: 30~40분 순수 작업 + 스펙 작성/검토
+
+## 세션 교훈
+
+1. **B28 #gmail-query-pipe-miss 재현 2회**: 대표님이 "bb_auditor_step1 안 와" → 제가 다른 쿼리로 교차검증 → 실제 도착 확인. 의심 레인(4층) false positive여도 "한 번 더 확인" 효과.
+
+2. **autofix 우회 성공 케이스**: 제 스펙의 앵커 가정 틀림 → autofix가 수정본으로 올바른 상태 수렴. 운 좋은 결과지만 drift 위험 여전. auditor 필요성 재확인.
+
+3. **Step 1~3 순조**: L1 작업은 예상대로 깔끔. L2(Step 2)도 자가방어 덕에 안전. L3(Step 4)만 새 세션 집중 필요.
+
+## 산출물 (프로젝트 파일 3개 Gmail 드래프트 대기)
+
+1. bb-auditor_v1_설계_20260419.md (288줄)
+2. 오케_작업기준_재조정_v3_20260419.md (지시 실수 방어 체계 추가)
+3. 오케_실패복구_사례집_v6_20260419.md (B24~B29, #stdout-loss 10/10 임계 달성)
+
+## 다음 세션 준비사항
+
+- 프로젝트 파일 3개 업로드 (기존 v1~v4, v1~v2 삭제)
+- bb-auditor 설계 문서 리뷰 (특히 section 4 Claude API 호출 설계)
+- Step 4부터 재개
+
+신뢰할 수 있는 마일스톤까지 왔습니다. 다음 세션에서 auditor.py 본체 집중 구현으로 3층 완공 목표.
 ### 2026-04-18
 
 #### 결정
@@ -4547,6 +4618,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 
 
 
+
+
 ## [1~2주 전]
 
 - 2026-04-13: Supabase→PostgreSQL 이관 완료, 법제처 판례 API 연동 + 전체 수집 시작, 0층 API 110개 정리
@@ -4555,6 +4628,8 @@ Qdrant: 판례 임베딩 + 신체감정 결과 구조화(등급/상실률/감정
 - 2026-04-10: 마스터플랜 v7 최종, 삽질방지헌법 v7 추가, RAM 티어별 도구 분석
 
 ---
+
+
 
 
 
